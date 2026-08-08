@@ -6,89 +6,90 @@
 //
 
 import Foundation
-import SwiftUI
 
-// MARK: - Şehir ve Hava Durumu Modeli (Şablonumuz)
-struct CityWeather: Identifiable, Codable, Equatable {
-    let id: Int // OpenWeather API'nin şehirlere verdiği sabit numara
-    let name: String
+// MARK: - şehrin hava durumu verisi
+struct CityWeather: Codable, Equatable {
+    // burası "var" çünkü şehir ismini sonradan değiştirmem gerekiyor. api bazen
+    // aradığım şehir yerine yakınındaki bir semti döndürüyordu, o yüzden ekranda
+    // gösterilecek ismi kendim düzeltip üzerine yazıyorum (applying fonksiyonuna bak)
+    var name: String
     let country: String
     let temperature: Double
-    
+
     let feelsLike: Double
     let pressure: Int
     let visibility: Int
     let cloudiness: Int
-    
-    // YENİ: Gündoğumu ve Günbatımı Saatleri
+
+    // gündoğumu ve günbatımı saatleri, ekranda alt tarafta gösteriliyor
     let sunrise: Date?
     let sunset: Date?
-    
+
     let conditionDescription: String
-    let conditionCode: Int
+    let conditionCode: Int // ekrandaki ikonu ve arka plan rengini bu kod belirliyor
+    // api bazen aynı anda birden fazla hava durumu döndürüyor, mesela kar+sis gibi.
+    // birinci eleman zaten conditionCode ile aynı, geri kalanları arka plandaki
+    // parçacık efektleri için kullanıyorum ki ikisi de aynı anda görünebilsin
+    let conditionCodes: [Int]
     let humidity: Int
     let windSpeed: Double
-    var isFavorite: Bool = false // Şehrin favori olup olmadığını tutacağız
-    
-    // UI (Arayüz) ekranda sıcaklığı doğrudan "29°" diye gösterebilsin diye hazırladığımız özellik
-    var formattedTemperature: String {
-        return "\(Int(temperature.rounded()))°"
+    let windDeg: Int? // rüzgarın yönü, ekrandaki küçük pusula okuna bunu veriyorum
+    let windGust: Double? // ani rüzgar hamlesi, api her zaman göndermiyor o yüzden opsiyonel
+
+    let tempMin: Double // o günün en düşük ölçülen sıcaklığı
+    let tempMax: Double // o günün en yüksek ölçülen sıcaklığı
+
+    // şehrin koordinatları, hava kalitesi isteği için lazım
+    let lat: Double
+    let lon: Double
+
+    // şehrin utc'ye göre saat farkı. günlük tahmindeki "bugün/yarın" hesabını
+    // telefonun saatine göre değil şehrin kendi saatine göre yapmam lazım,
+    // yoksa yurt dışı bir şehirde günler kayıp yanlış görünüyordu
+    let timezoneOffsetSeconds: Int
+
+    // şu an gece mi gündüz mü, gündoğumu/günbatımı saatlerine bakarak anlıyorum.
+    // arka plan rengi ve ikon (güneş mi ay mı) buna göre değişiyor
+    var isNight: Bool {
+        guard let sunrise, let sunset else { return false }
+        let now = Date()
+        return now < sunrise || now > sunset
     }
-    
-    // OpenWeather API'den gelen kod numarasına göre Apple'ın şık ikon adını veren sistem
+
+    // hava durumu koduna göre ekranda gösterilecek ikonun adını seçiyor.
+    // gece olunca güneş yerine ay ikonlarına geçiyorum
     var systemIconName: String {
-        switch conditionCode {
-        case 200...232: return "cloud.bolt.rain.fill"
-        case 300...321: return "cloud.drizzle.fill"
-        case 500...531: return "cloud.rain.fill"
-        case 600...622: return "cloud.snow.fill"
-        case 701...781: return "cloud.fog.fill"
-        case 800:       return "sun.max.fill"
-        case 801...804: return "cloud.fill"
-        default:        return "cloud.sun.fill"
-        }
+        WMOWeatherCode.systemIconName(for: conditionCode, isNight: isNight)
     }
-    
-    // Hava durumuna (conditionCode) göre arka plan renklerini belirleyen sistem
-    var backgroundColors: [Color] {
-        switch conditionCode {
-        case 200...232: // Fırtına
-            return [Color.gray.opacity(0.9), Color.black.opacity(0.8)]
-        case 300...531: // Yağmur
-            return [Color.blue.opacity(0.6), Color.gray.opacity(0.8)]
-        case 600...622: // Kar
-            return [Color.blue.opacity(0.4), Color.white.opacity(0.5)]
-        case 701...781: // Sis / Pus
-            return [Color.gray.opacity(0.6), Color.gray.opacity(0.8)]
-        case 800:       // Açık / Güneşli
-            return [Color.blue.opacity(0.6), Color.orange.opacity(0.5)]
-        case 801...804: // Bulutlu
-            return [Color.blue.opacity(0.5), Color.gray.opacity(0.6)]
-        default:
-            return [Color.blue.opacity(0.7), Color.purple.opacity(0.6)]
-        }
+
+    // ülkenin adını kullanıcının telefon diline göre çeviriyor, api sadece
+    // "tr" gibi kısa bir kod veriyor ama ekranda "türkiye" yazmasını istiyorum
+    var localizedCountryName: String {
+        Locale.current.localizedString(forRegionCode: country) ?? country
+    }
+
+    // çiğ noktasını sıcaklık ve nemden hesaplıyorum, api bunu vermiyor ama
+    // formülü biliyoruz (magnus-tetens formülü) o yüzden yeni istek atmaya gerek yok
+    var dewPoint: Double {
+        guard humidity > 0 else { return temperature }
+        let b = 17.625
+        let c = 243.04
+        let gamma = (b * temperature) / (c + temperature) + log(Double(humidity) / 100)
+        return (c * gamma) / (b - gamma)
     }
 }
 
-// MARK: - 5 Günlük Tahmin Listesi İçin Yeni Model
+// MARK: - günlük tahmin listesindeki tek bir gün
 struct DailyForecast: Identifiable {
     let id = UUID()
     let date: Date
     let minTemperature: Double
     let maxTemperature: Double
     let conditionCode: Int
-    
-    // Günlük listedeki hava durumu ikonları için
+    let pop: Double // o gün yağmur yağma olasılığı, 0 ile 1 arasında bir sayı
+
+    // günlük tahmin satırındaki küçük ikon için
     var systemIconName: String {
-        switch conditionCode {
-        case 200...232: return "cloud.bolt.rain.fill"
-        case 300...321: return "cloud.drizzle.fill"
-        case 500...531: return "cloud.rain.fill"
-        case 600...622: return "cloud.snow.fill"
-        case 701...781: return "cloud.fog.fill"
-        case 800:       return "sun.max.fill"
-        case 801...804: return "cloud.fill"
-        default:        return "cloud.sun.fill"
-        }
+        WMOWeatherCode.systemIconName(for: conditionCode)
     }
 }

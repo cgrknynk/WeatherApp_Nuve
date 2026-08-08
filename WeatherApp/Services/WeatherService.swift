@@ -7,149 +7,286 @@
 
 import Foundation
 
-// MARK: - Mevcut Hava Durumu DTO'su
-private struct OpenWeatherResponse: Codable {
-    let id: Int
+// MARK: - "neresi" sorusunun cevabı
+// openweather'ın ücretsiz servisini artık sadece isim/ülke/koordinat bulmak
+// için kullanıyorum. open-meteo bir şehir veritabanı değil, sadece hava
+// durumu hesaplıyor, isimden koordinat bulamıyor. asıl sıcaklık verisi
+// aşağıdaki open-meteo modelinden geliyor. nonisolated yazmamın sebebi,
+// proje genelinde her şey mainactor'a bağlı ama bu decode işlemi ana
+// thread'e sıkışmasın istiyorum
+private nonisolated struct LocationIdentityResponse: Codable {
     let name: String
+    let coord: Coord
     let sys: Sys
-    let main: Main
-    let weather: [WeatherDetail]
-    let wind: Wind
-    let visibility: Int
-    let clouds: Clouds
-    
-    struct Sys: Codable {
-        let country: String
-        let sunrise: TimeInterval?
-        let sunset: TimeInterval?
-    }
-    struct Main: Codable {
-        let temp: Double
-        let humidity: Int
-        let feels_like: Double
-        let pressure: Int
-    }
-    struct WeatherDetail: Codable { let description: String; let id: Int }
-    struct Wind: Codable { let speed: Double }
-    struct Clouds: Codable { let all: Int }
+
+    struct Coord: Codable { let lat: Double; let lon: Double }
+    struct Sys: Codable { let country: String }
 }
 
-// MARK: - 5 Günlük / 3 Saatlik Tahmin DTO'su
-private struct OpenWeatherForecastResponse: Codable {
-    let list: [ForecastItem]
-    
-    struct ForecastItem: Codable {
-        let dt: TimeInterval // Tarih/Saat (Unix Timestamp)
+// MARK: - "ne durumda" sorusunun cevabı
+// tek bir istekte anlık durumu, saatlik ve günlük tahmini birlikte veriyor.
+// günlük en düşük/en yüksek değerleri openweather'daki gibi tahmini değil,
+// o günün tüm saatlik verisinden gerçekten hesaplanıyor, küçük şehirlerde
+// bile güvenilir (detaylı hikaye Kod-Rehberi.md'de var)
+private nonisolated struct OpenMeteoResponse: Codable {
+    let utc_offset_seconds: Int
+    let current: Current
+    let hourly: Hourly
+    let daily: Daily
+
+    struct Current: Codable {
+        let temperature_2m: Double
+        let relative_humidity_2m: Int
+        let apparent_temperature: Double
+        let weather_code: Int
+        let cloud_cover: Int
+        let pressure_msl: Double
+        let visibility: Double
+        let wind_speed_10m: Double
+        let wind_direction_10m: Int
+        let wind_gusts_10m: Double?
+    }
+
+    struct Hourly: Codable {
+        let time: [String]
+        let temperature_2m: [Double]
+        let precipitation_probability: [Double]
+        let weather_code: [Int]
+    }
+
+    struct Daily: Codable {
+        let time: [String]
+        let weather_code: [Int]
+        let temperature_2m_max: [Double]
+        let temperature_2m_min: [Double]
+        let precipitation_probability_max: [Double]
+        let sunrise: [String]
+        let sunset: [String]
+    }
+}
+
+// MARK: - hava kalitesi cevabı
+private nonisolated struct AirPollutionResponse: Codable {
+    let list: [Item]
+    struct Item: Codable {
         let main: Main
-        let weather: [WeatherDetail]
-        
-        struct Main: Codable {
-            let temp: Double
-            let temp_min: Double?
-            let temp_max: Double?
-        }
-        struct WeatherDetail: Codable { let id: Int }
+        struct Main: Codable { let aqi: Int }
     }
 }
 
-// MARK: - Asıl Ağ Servisimiz
-class WeatherService: WeatherServiceProtocol {
-    
-    weak var delegate: WeatherServiceDelegate?
-    private let apiKey = "eff32b3ac02ea2adf9abcb7f29533d4a"
-    
-    // MARK: - Mevcut Hava Durumunu Çeken Fonksiyon
-    func fetchWeather(for cityName: String) async {
-        
-        guard let encodedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(encodedCityName)&appid=\(apiKey)&units=metric&lang=tr"
-        guard let url = URL(string: urlString) else { return }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let decodedData = try JSONDecoder().decode(OpenWeatherResponse.self, from: data)
-            
-            // DÜZELTİLDİ: Parametre sıralaması CityWeather modeliyle tamamen uyumlu hale getirildi
-            let cityWeather = CityWeather(
-                id: decodedData.id,
-                name: decodedData.name,
-                country: decodedData.sys.country,
-                temperature: decodedData.main.temp,
-                feelsLike: decodedData.main.feels_like,
-                pressure: decodedData.main.pressure,
-                visibility: decodedData.visibility,
-                cloudiness: decodedData.clouds.all,
-                sunrise: decodedData.sys.sunrise.map { Date(timeIntervalSince1970: $0) },
-                sunset: decodedData.sys.sunset.map { Date(timeIntervalSince1970: $0) },
-                conditionDescription: decodedData.weather.first?.description ?? "Bilinmiyor",
-                conditionCode: decodedData.weather.first?.id ?? 800,
-                humidity: decodedData.main.humidity,
-                windSpeed: decodedData.wind.speed
-            )
-            
-            DispatchQueue.main.async {
-                self.delegate?.weatherServiceDidFetchData(self, didUpdateWeather: cityWeather)
-            }
-            
-        } catch {
-            DispatchQueue.main.async {
-                self.delegate?.weatherServiceDidFail(self, withError: error)
-            }
+// MARK: - hava durumu + tahmin paketi
+// open-meteo tek istekte anlık durumu, saatlik ve günlük tahmini birlikte
+// verdiği için viewmodel artık iki ayrı istek atmıyor, tek çağrı yetiyor
+struct WeatherBundle: Sendable {
+    let current: CityWeather
+    let hourly: [HourlyForecast]
+    let daily: [DailyForecast]
+}
+
+// MARK: - servisin sözleşmesi
+// eskiden bir delegate üzerinden haber veriyordu, servis zaten async/await
+// kullandığı için buna gerek kalmadı. artık direkt sonucu döndürüyor ya da
+// hata fırlatıyor, viewmodel tarafında tek bir do/catch yeterli
+nonisolated protocol WeatherServiceProtocol: Sendable {
+    func fetchWeather(for cityName: String) async throws -> WeatherBundle
+    func fetchWeather(lat: Double, lon: Double) async throws -> WeatherBundle
+    func fetchAirQuality(lat: Double, lon: Double) async throws -> AirQuality
+}
+
+// MARK: - konum üzerinden ortak çağrı (WeatherLocation)
+// isim mi koordinat mı diye her yerde tekrar tekrar yazmamak için bu
+// dallanmayı protokolün kendisine ekleyip tek yerden paylaşıyorum
+extension WeatherServiceProtocol {
+    func fetchWeather(at location: WeatherLocation) async throws -> WeatherBundle {
+        switch location {
+        case .name(let name):
+            return try await fetchWeather(for: name)
+        case .coordinate(let lat, let lon, _):
+            return try await fetchWeather(lat: lat, lon: lon)
         }
     }
-    
-    // MARK: - Saatlik ve Günlük Tahmin Verilerini Çeken Fonksiyon
-    func fetchForecast(for cityName: String) async {
-        
-        guard let encodedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
-        let urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(encodedCityName)&appid=\(apiKey)&units=metric&lang=tr"
-        guard let url = URL(string: urlString) else { return }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let decodedData = try JSONDecoder().decode(OpenWeatherForecastResponse.self, from: data)
-            
-            // 1. İŞLEM: Yalnızca ilk 24 saati alıp Saatlik Model'e çeviriyoruz
-            let forecastItems = Array(decodedData.list.prefix(8))
-            let hourlyForecast = forecastItems.map { item in
-                HourlyForecast(
-                    time: Date(timeIntervalSince1970: item.dt),
-                    temperature: item.main.temp
-                )
-            }
-            
-            // 2. İŞLEM: Tüm 40 veriyi alıp günlere göre grupluyoruz (5 Günlük Liste İçin)
-            let calendar = Calendar.current
-            var dailyForecasts: [DailyForecast] = []
-            
-            let groupedByDay = Dictionary(grouping: decodedData.list) { item -> Date in
-                let date = Date(timeIntervalSince1970: item.dt)
-                return calendar.startOfDay(for: date)
-            }
-            
-            let sortedDays = groupedByDay.keys.sorted()
-            
-            for day in sortedDays {
-                guard let itemsForDay = groupedByDay[day] else { continue }
-                
-                let minTemp = itemsForDay.map { $0.main.temp_min ?? $0.main.temp }.min() ?? 0
-                let maxTemp = itemsForDay.map { $0.main.temp_max ?? $0.main.temp }.max() ?? 0
-                let conditionCode = itemsForDay.first?.weather.first?.id ?? 800
-                
-                dailyForecasts.append(DailyForecast(
-                    date: day,
-                    minTemperature: minTemp,
-                    maxTemperature: maxTemp,
-                    conditionCode: conditionCode
-                ))
-            }
-            
-            DispatchQueue.main.async {
-                self.delegate?.weatherServiceDidFetchForecast(self, hourly: hourlyForecast, daily: dailyForecasts)
-            }
-            
-        } catch {
-            print("Tahmin verisi çekilirken hata oluştu: \(error)")
+}
+
+// MARK: - asıl ağ servisi
+// hiçbir değişken durumu yok (sadece sabit bir api anahtarı tutuyor), o yüzden
+// class değil struct kullandım, her yerde güvenle yeniden yaratılabiliyor.
+// nonisolated koydum çünkü proje genelinde her şey mainactor'a bağlı ama ağ
+// isteği ana thread'i kilitlemesin istiyorum
+//
+// iki farklı sağlayıcı kullanıyorum, bilerek: openweather'ın ücretsiz servisi
+// küçük şehirlerde en düşük/en yüksek sıcaklığı güvenilir vermiyor, kendi
+// belgelerinde bile bunun "o anki ölçüme yakın bir tahmin" olduğunu yazıyorlar.
+// open-meteo ise günlük değerleri o günün tüm saatlik verisinden hesaplıyor,
+// hem küçük şehirlerde de tutarlı hem tamamen ücretsiz. ama open-meteo şehir
+// arama yapamıyor, sadece koordinat kabul ediyor. o yüzden isim/koordinat
+// bulma işini openweather'da bırakıp asıl sıcaklık verisini open-meteo'dan
+// çekiyorum
+nonisolated struct WeatherService: WeatherServiceProtocol {
+
+    private let apiKey = Secrets.openWeatherAPIKey
+
+    // MARK: - isimle ya da koordinatla hava durumu çekme
+    func fetchWeather(for cityName: String) async throws -> WeatherBundle {
+        guard let encodedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            throw WeatherError.invalidResponse
         }
+        let identity = try await fetchLocationIdentity(
+            urlString: "https://api.openweathermap.org/data/2.5/weather?q=\(encodedCityName)&appid=\(apiKey)"
+        )
+        return try await fetchWeather(identity: identity)
+    }
+
+    func fetchWeather(lat: Double, lon: Double) async throws -> WeatherBundle {
+        let identity = try await fetchLocationIdentity(
+            urlString: "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=\(apiKey)"
+        )
+        return try await fetchWeather(identity: identity)
+    }
+
+    // MARK: - konum kimliğini bulma
+    private struct LocationIdentity {
+        let name: String
+        let country: String
+        let lat: Double
+        let lon: Double
+    }
+
+    private func fetchLocationIdentity(urlString: String) async throws -> LocationIdentity {
+        guard let url = URL(string: urlString) else { throw WeatherError.invalidResponse }
+
+        let (data, response) = try await requestData(from: url)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
+            throw WeatherError.cityNotFound
+        }
+
+        guard let decoded = try? JSONDecoder().decode(LocationIdentityResponse.self, from: data) else {
+            throw WeatherError.decoding
+        }
+
+        return LocationIdentity(
+            name: decoded.name,
+            country: decoded.sys.country,
+            lat: decoded.coord.lat,
+            lon: decoded.coord.lon
+        )
+    }
+
+    // MARK: - open-meteo'dan asıl sıcaklık verisini çekme
+    private func fetchWeather(identity: LocationIdentity) async throws -> WeatherBundle {
+        let urlString = "https://api.open-meteo.com/v1/forecast"
+            + "?latitude=\(identity.lat)&longitude=\(identity.lon)"
+            + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,pressure_msl,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
+            + "&hourly=temperature_2m,precipitation_probability,weather_code"
+            + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
+            + "&timezone=auto&wind_speed_unit=kmh&forecast_days=7&forecast_hours=24"
+
+        guard let url = URL(string: urlString) else { throw WeatherError.invalidResponse }
+
+        let (data, _) = try await requestData(from: url)
+        guard let decoded = try? JSONDecoder().decode(OpenMeteoResponse.self, from: data) else {
+            throw WeatherError.decoding
+        }
+
+        // open-meteo'nun zaman metinleri (mesela "2026-08-03T14:00") zaten o
+        // şehrin kendi yerel saatinde geliyor, o yüzden çözerken de şehrin
+        // kendi utc farkını kullanıyorum, telefonun saat dilimini değil. yoksa
+        // yurt dışı bir şehre bakarken saatler kayardı
+        let timeZone = TimeZone(secondsFromGMT: decoded.utc_offset_seconds) ?? .current
+        let dateTimeFormatter = Self.formatter(dateFormat: "yyyy-MM-dd'T'HH:mm", timeZone: timeZone)
+        let dayFormatter = Self.formatter(dateFormat: "yyyy-MM-dd", timeZone: timeZone)
+
+        let primaryConditionCode = WMOWeatherCode.legacyConditionCode(for: decoded.current.weather_code)
+
+        let current = CityWeather(
+            name: identity.name,
+            country: identity.country,
+            temperature: decoded.current.temperature_2m,
+            feelsLike: decoded.current.apparent_temperature,
+            pressure: Int(decoded.current.pressure_msl.rounded()),
+            visibility: Int(decoded.current.visibility),
+            cloudiness: decoded.current.cloud_cover,
+            sunrise: decoded.daily.sunrise.first.flatMap(dateTimeFormatter.date(from:)),
+            sunset: decoded.daily.sunset.first.flatMap(dateTimeFormatter.date(from:)),
+            conditionDescription: WMOWeatherCode.localizedDescription(for: decoded.current.weather_code),
+            conditionCode: primaryConditionCode,
+            conditionCodes: [primaryConditionCode],
+            humidity: decoded.current.relative_humidity_2m,
+            windSpeed: decoded.current.wind_speed_10m,
+            windDeg: decoded.current.wind_direction_10m,
+            windGust: decoded.current.wind_gusts_10m,
+            tempMin: decoded.daily.temperature_2m_min.first ?? decoded.current.temperature_2m,
+            tempMax: decoded.daily.temperature_2m_max.first ?? decoded.current.temperature_2m,
+            lat: identity.lat,
+            lon: identity.lon,
+            timezoneOffsetSeconds: decoded.utc_offset_seconds
+        )
+
+        // forecast_hours=24 dediğim için open-meteo şu anki saatten itibaren
+        // tam 24 saatlik veri veriyor, elle "ilk 8 tanesini al" gibi bir
+        // kırpmaya gerek kalmadı
+        let hourly: [HourlyForecast] = (0..<decoded.hourly.time.count).compactMap { index in
+            guard let date = dateTimeFormatter.date(from: decoded.hourly.time[index]) else { return nil }
+            return HourlyForecast(
+                time: date,
+                temperature: decoded.hourly.temperature_2m[index],
+                pop: decoded.hourly.precipitation_probability[index] / 100
+            )
+        }
+
+        // open-meteo günleri zaten şehrin kendi takvimine göre gruplayıp
+        // veriyor, elle gün bölme mantığına gerek kalmadı
+        let daily: [DailyForecast] = (0..<decoded.daily.time.count).compactMap { index in
+            guard let date = dayFormatter.date(from: decoded.daily.time[index]) else { return nil }
+            return DailyForecast(
+                date: date,
+                minTemperature: decoded.daily.temperature_2m_min[index],
+                maxTemperature: decoded.daily.temperature_2m_max[index],
+                conditionCode: WMOWeatherCode.legacyConditionCode(for: decoded.daily.weather_code[index]),
+                pop: decoded.daily.precipitation_probability_max[index] / 100
+            )
+        }
+
+        return WeatherBundle(current: current, hourly: hourly, daily: daily)
+    }
+
+    // MARK: - hava kalitesini çekme
+    // bu ayrı openweather servisi zaten sorunsuz çalışıyordu, sadece sıcaklık
+    // verisini değiştirdim, hava kalitesine hiç dokunmadım
+    func fetchAirQuality(lat: Double, lon: Double) async throws -> AirQuality {
+        let urlString = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(lat)&lon=\(lon)&appid=\(apiKey)"
+        guard let url = URL(string: urlString) else { throw WeatherError.invalidResponse }
+
+        let (data, _) = try await requestData(from: url)
+        guard let decoded = try? JSONDecoder().decode(AirPollutionResponse.self, from: data),
+              let firstReading = decoded.list.first else {
+            throw WeatherError.decoding
+        }
+
+        return AirQuality(aqi: firstReading.main.aqi)
+    }
+
+    // MARK: - ortak ağ isteği
+    // üç fonksiyonun da tekrar tekrar yazacağı urlsession çağrısını burada
+    // topladım, bağlantı hatasını da tek bir WeatherError'a çeviriyorum
+    private func requestData(from url: URL) async throws -> (Data, URLResponse) {
+        do {
+            return try await URLSession.shared.data(from: url)
+        } catch {
+            throw WeatherError.network
+        }
+    }
+
+    // MARK: - open-meteo'nun zaman metinlerini çözme
+    // "2026-08-03T14:00" gibi bir metni, şehrin kendi utc farkına göre gerçek
+    // bir Date'e çeviriyorum. en_US_POSIX kullanıyorum çünkü sabit formatlı
+    // tarihleri okurken telefonun bölge ayarından etkilenmek istemiyorum.
+    // hem saatlik hem günlük zaman metinleri aynı mantıkla çözülüyor, tek
+    // farkları format string'i, o yüzden tek fonksiyon yeterli
+    private static func formatter(dateFormat: String, timeZone: TimeZone) -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = dateFormat
+        formatter.timeZone = timeZone
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
     }
 }

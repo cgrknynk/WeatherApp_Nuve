@@ -3,3 +3,6 @@ xcuserdata/
 *.xcuserstate
 DerivedData/
 build/
+
+# api anahtarı, asla git'e girmemeli
+WeatherApp/Services/Secrets.swift

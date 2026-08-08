@@ -1,0 +1,268 @@
+//
+//  WeatherContentView.swift
+//  WeatherApp
+//
+//  Created by Çağrı Kaan YANIK on 03.08.2026.
+//
+
+import SwiftUI
+import Charts
+
+// MARK: - şehir detayının asıl içeriği, kaydırılabilir kısım
+// bunu WeatherView'ın gövdesinden bilerek ayrı bir dosyada tutuyorum: bu View
+// tamamen durumsuz, hiçbir ortam nesnesine bağlı değil, sadece kendisine
+// verilen veriyi gösteriyor. böylece xcode önizlemesinde tek başına, örnek
+// veriyle kolayca test edilebiliyor ve WeatherView'ın kendisi çok daha kısa kalıyor
+struct WeatherContentView: View {
+    let weather: CityWeather
+    let hourly: [HourlyForecast]
+    let daily: [DailyForecast]
+    let airQuality: AirQuality?
+    let unit: TemperatureUnit
+    let windUnit: WindSpeedUnit
+    let lastUpdated: Date?
+    let onRefresh: () -> Void
+
+    // şehrin kendi saat dilimi. hem günlük tahmindeki "bugün/yarın" hesabı hem
+    // de aşağıdaki canlı saat gösterimi bunu kullanıyor, telefonun saatini değil
+    private var cityTimeZone: TimeZone {
+        TimeZone(secondsFromGMT: weather.timezoneOffsetSeconds) ?? .current
+    }
+
+    private var cityCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = cityTimeZone
+        return calendar
+    }
+
+    // verilen anı, şehrin kendi saat dilimine göre "14:32" gibi kısa bir saat
+    // yazısına çeviriyor
+    private func localTimeText(_ date: Date) -> String {
+        date.formatted(Date.FormatStyle(date: .omitted, time: .shortened, timeZone: cityTimeZone))
+    }
+
+    var body: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 4) {
+
+                // üst kısım, ana bilgiler
+                VStack(spacing: 6) {
+                    Text(weather.name)
+                        .font(.weatherCityName)
+                        .foregroundColor(.white)
+                        .padding(.top, 40)
+
+                    Text(weather.localizedCountryName)
+                        .font(.weatherCaption)
+                        .foregroundColor(.white.opacity(0.6))
+
+                    // şehrin o anki yerel saati, dakikada bir kendini tazeliyor.
+                    // küçük bir cam hap içinde, diğer küçük yazılardan bilerek
+                    // daha belirgin — hızlıca göz atınca hemen okunsun diye
+                    TimelineView(.everyMinute) { timeline in
+                        HStack(spacing: 5) {
+                            Image(systemName: "clock.fill")
+                                .font(.system(size: 11, weight: .semibold))
+                            Text(localTimeText(timeline.date))
+                                .font(.weatherRowSubtitle.bold())
+                        }
+                        .foregroundColor(.white.opacity(0.92))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 5)
+                        .background(Capsule().fill(.white.opacity(0.14)))
+                        .overlay(Capsule().strokeBorder(.white.opacity(0.22), lineWidth: 0.75))
+                    }
+                    .padding(.top, 2)
+
+                    Text(unit.format(weather.temperature))
+                        .font(.weatherHero)
+                        .foregroundColor(.white)
+                        .contentTransition(.numericText())
+                        .padding(.leading, 15)
+
+                    HStack(spacing: 8) {
+                        Image(systemName: weather.systemIconName)
+                            .symbolRenderingMode(.multicolor)
+                            .symbolEffect(.bounce, value: weather.conditionCode)
+
+                        Text(weather.conditionDescription.capitalized)
+                            .font(.weatherCondition)
+                    }
+                    .foregroundColor(.white)
+                    .opacity(0.9)
+
+                    // günün ölçülen en düşük/en yüksek sıcaklığı, api zaten
+                    // veriyordu ama önceden hiç ekranda göstermiyordum
+                    HStack(spacing: 6) {
+                        Text(String(format: String(localized: "weather.high_format", defaultValue: "Y:%@"), unit.format(weather.tempMax)))
+                        Text(String(format: String(localized: "weather.low_format", defaultValue: "D:%@"), unit.format(weather.tempMin)))
+                    }
+                    .font(.weatherTemperatureSmall)
+                    .foregroundColor(.white.opacity(0.75))
+                    .padding(.top, 2)
+
+                    // hissedilen sıcaklık gerçek sıcaklıktan belirgin farklıysa
+                    // küçük bir not ekliyorum, apple'ın kendi uygulamasında da benzeri var
+                    if abs(weather.feelsLike - weather.temperature) >= 2 {
+                        Text(feelsLikeNote(for: weather))
+                            .font(.weatherCaption)
+                            .foregroundColor(.white.opacity(0.6))
+                            .padding(.top, 2)
+                    }
+
+                    if let lastUpdated {
+                        Text("Son güncelleme: \(lastUpdated.formatted(date: .omitted, time: .shortened))")
+                            .font(.weatherCaption)
+                            .foregroundColor(.white.opacity(0.55))
+                            .padding(.top, 2)
+                    }
+                }
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
+
+                Spacer().frame(height: 30)
+
+                // orta kısım, 24 saatlik grafik
+                if !hourly.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        sectionHeader("24 SAATLİK TAHMİN", icon: "clock")
+
+                        // şu an çizgisi dakikada bir kendini tazeliyor ki grafikteki
+                        // konumu gerçek zamana göre kayarak ilerlesin
+                        TimelineView(.everyMinute) { timeline in
+                            Chart {
+                                // open-meteo artık gerçek saatlik veri veriyor, 24
+                                // noktanın hepsine etiket koyarsam üst üste binip
+                                // karman çorman görünüyor. o yüzden çizgi hâlâ tüm
+                                // 24 saati kullanıyor ama nokta ve etiket sadece
+                                // 3 saatte bir gösteriliyor
+                                ForEach(Array(hourly.enumerated()), id: \.offset) { index, forecast in
+                                    AreaMark(
+                                        x: .value("Saat", forecast.time),
+                                        y: .value("Sıcaklık", forecast.temperature)
+                                    )
+                                    .foregroundStyle(
+                                        LinearGradient(colors: [.white.opacity(0.4), .white.opacity(0.0)], startPoint: .top, endPoint: .bottom)
+                                    )
+
+                                    LineMark(
+                                        x: .value("Saat", forecast.time),
+                                        y: .value("Sıcaklık", forecast.temperature)
+                                    )
+                                    .foregroundStyle(.white)
+                                    .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+
+                                    if index % 3 == 0 {
+                                        PointMark(
+                                            x: .value("Saat", forecast.time),
+                                            y: .value("Sıcaklık", forecast.temperature)
+                                        )
+                                        .foregroundStyle(.white)
+                                        .annotation(position: .top) {
+                                            Text(unit.format(forecast.temperature))
+                                                .font(.weatherTemperatureSmall.bold())
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                }
+
+                                // grafikte "şu an" neredeyiz onu gösteren, kesik çizgili ince bir işaret.
+                                // etiketi küçük bir kapsül içine koyuyorum, yoksa üstündeki başlıkla
+                                // (24 SAATLİK TAHMİN) çakışıp karman çorman görünüyordu
+                                RuleMark(x: .value("Şu An", timeline.date))
+                                    .foregroundStyle(.white.opacity(0.5))
+                                    .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                                    .annotation(position: .top, spacing: 2) {
+                                        Text(localTimeText(timeline.date))
+                                            .font(.caption2.bold())
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 6)
+                                            .padding(.vertical, 2)
+                                            .background(Capsule().fill(.black.opacity(0.35)))
+                                    }
+                            }
+                            .padding(.top, 20)
+                            .frame(height: 120)
+                            .chartXAxis {
+                                AxisMarks(values: .stride(by: .hour, count: 3)) { _ in
+                                    AxisValueLabel(format: .dateTime.hour())
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            .chartYAxis(.hidden)
+                        }
+                    }
+                    .padding()
+                    .weatherGlassCard()
+                    .padding(.horizontal, 20)
+                }
+
+                Spacer().frame(height: 20)
+
+                // günlük tahmin listesi
+                if !daily.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        sectionHeader("ÖNÜMÜZDEKİ GÜNLER", icon: "calendar")
+
+                        VStack(spacing: 12) {
+                            ForEach(daily) { day in
+                                DailyForecastRow(day: day, calendar: cityCalendar, unit: unit)
+                            }
+                        }
+                        .padding()
+                        .weatherGlassCard()
+                    }
+                    .padding(.horizontal, 20)
+                }
+
+                Spacer().frame(height: 20)
+
+                // hava kalitesi kartı
+                if let airQuality {
+                    AirQualityCard(airQuality: airQuality)
+                        .padding(.horizontal, 20)
+
+                    Spacer().frame(height: 20)
+                }
+
+                // alt kısım, detay kutuları ızgarası
+                GlassEffectContainer {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted)
+                        WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
+
+                        WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike))
+                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa")
+
+                        WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km")
+                        WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted)
+
+                        WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint))
+                        SunTimesBox(sunrise: weather.sunrise, sunset: weather.sunset)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40)
+            }
+        }
+        .refreshable { onRefresh() }
+        .sensoryFeedback(.success, trigger: lastUpdated)
+    }
+
+    // MARK: - hissedilen sıcaklık notu
+    private func feelsLikeNote(for weather: CityWeather) -> String {
+        weather.feelsLike > weather.temperature
+            ? String(localized: "weather.feels_warmer", defaultValue: "Gerçek sıcaklıktan daha sıcak hissettiriyor")
+            : String(localized: "weather.feels_cooler", defaultValue: "Gerçek sıcaklıktan daha serin hissettiriyor")
+    }
+
+    private func sectionHeader(_ title: LocalizedStringKey, icon: String) -> some View {
+        HStack {
+            Image(systemName: icon)
+            Text(title)
+                .tracking(1.1)
+        }
+        .font(.weatherSectionHeader)
+        .foregroundColor(.white.opacity(0.6))
+        .padding(.horizontal, 5)
+    }
+}
