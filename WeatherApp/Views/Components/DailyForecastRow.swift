@@ -13,6 +13,13 @@ struct DailyForecastRow: View {
     let calendar: Calendar
     let unit: TemperatureUnit
 
+    // yağış olasılığı satırının, o günün havasına göre kar mı yağmur mu
+    // olduğunu gösteren ayrı bir ikon/renk kullanması için. 600-622 aralığı
+    // WMOWeatherCode.swift'teki kar kodları (bkz. o dosya)
+    private var isSnowyDay: Bool {
+        (600...622).contains(day.conditionCode)
+    }
+
     var body: some View {
         HStack {
             // gün ismi, sistem diline göre değişiyor (bugün, salı gibi)
@@ -23,15 +30,17 @@ struct DailyForecastRow: View {
 
             if day.pop >= 0.1 {
                 HStack(spacing: 2) {
-                    Image(systemName: "drop.fill")
+                    Image(systemName: isSnowyDay ? "snowflake" : "drop.fill")
                         .font(.caption2)
                     Text(Int(day.pop * 100).percentFormatted)
                         .font(.caption2)
+                        .lineLimit(1)
+                        .fixedSize()
                 }
-                .foregroundColor(.cyan)
-                .frame(width: 40, alignment: .leading)
+                .foregroundColor(isSnowyDay ? .white.opacity(0.85) : .cyan)
+                .frame(width: 46, alignment: .leading)
             } else {
-                Spacer().frame(width: 40)
+                Spacer().frame(width: 46)
             }
 
             Spacer()

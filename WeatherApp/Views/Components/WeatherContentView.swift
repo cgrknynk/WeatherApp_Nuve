@@ -299,16 +299,19 @@ struct WeatherContentView: View {
         }
     }
 
+    // ampul: "burada bir bilgi/fikir var" çağrışımı yapan, uygulamanın geri
+    // kalanında hiç kullanılmayan, bilerek amber renkli, kendine has bir ikon —
+    // diğer köşe düğmelerinden (yıldız, paylaş) bilinçli olarak farklı dursun diye
     private var cityFactButton: some View {
         Button {
             showCityFact = true
         } label: {
-            Image(systemName: "sparkles")
+            Image(systemName: "lightbulb.max.fill")
                 .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(.white)
+                .foregroundColor(.yellow)
                 .frame(width: 40, height: 40)
-                .background(Circle().fill(.white.opacity(0.16)))
-                .overlay(Circle().strokeBorder(.white.opacity(0.24), lineWidth: 0.75))
+                .background(Circle().fill(.yellow.opacity(0.18)))
+                .overlay(Circle().strokeBorder(.yellow.opacity(0.35), lineWidth: 0.75))
         }
         .padding(.top, 8)
         .padding(.trailing, 20)

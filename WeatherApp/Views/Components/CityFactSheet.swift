@@ -61,7 +61,7 @@ struct CityFactSheet: View {
 
         case .notFound:
             GlassWarningView(
-                iconName: "sparkles",
+                iconName: "lightbulb.max.fill",
                 message: String(
                     localized: "fact.not_found",
                     defaultValue: "Bu yer hakkında henüz bir bilgi bulamadım.\nBaşka bir şehri deneyebilirsin."
@@ -83,7 +83,7 @@ struct CityFactSheet: View {
                     }
 
                     HStack(spacing: 8) {
-                        Image(systemName: "sparkles")
+                        Image(systemName: "lightbulb.max.fill")
                             .foregroundColor(.yellow)
                         Text(fact.title)
                             .font(.weatherRowTitle)
