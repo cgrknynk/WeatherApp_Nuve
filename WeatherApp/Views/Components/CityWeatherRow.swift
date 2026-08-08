@@ -22,6 +22,10 @@ struct CityWeatherRow: View {
     let unit: TemperatureUnit
     var timezoneOffsetSeconds: Int? = nil
     var conditionCode: Int? = nil
+    // kullanıcının o favoriye kendi seçtiği kart rengi — verilmezse (filtre
+    // sonuçlarında ya da renksiz bir favoride) kartın nötr, varsayılan
+    // görünümü aynen kalıyor
+    var accentColor: Color? = nil
 
     // fırtına, kar ya da kuvvetli yağmur gibi "bir bakışta fark edilmesi
     // gereken" durumlar için küçük bir rozet — hafif çise/parçalı bulutlu
@@ -80,6 +84,6 @@ struct CityWeatherRow: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
-        .weatherGlassCard(cornerRadius: 18)
+        .weatherGlassCard(cornerRadius: 18, accentTint: accentColor)
     }
 }

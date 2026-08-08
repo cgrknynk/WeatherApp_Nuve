@@ -11,6 +11,10 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showFilter = false
     @State private var filter = WeatherFilter()
+    // favoriyi sağa kaydırınca açılan takma isim/renk düzenleme sayfası —
+    // sheet(item:) kullanıyorum çünkü FavoriteCity zaten Identifiable, hangi
+    // favorinin düzenlendiğini ayrı bir Bool yerine bu tek değişken tutuyor
+    @State private var editingFavorite: FavoriteCity?
 
     // arama kutusundaki otomatik tamamlama servisi
     @StateObject private var searchService = LocationSearchService()
@@ -99,7 +103,7 @@ struct HomeView: View {
                                     // o ekranın altındaki şeritten dokunarak oluyor (FavoriteSwitcherStrip'e bak)
                                     NavigationLink(destination: WeatherView(location: favorite.location, zoomNamespace: heroNamespace, zoomSourceID: favorite.name, favorites: viewModel.savedCities)) {
                                         FavoriteCityRow(
-                                            city: favorite.name,
+                                            favorite: favorite,
                                             snapshot: viewModel.favoriteSnapshots[favorite.name.lowercased()],
                                             unit: viewModel.preferredUnit
                                         )
@@ -115,12 +119,22 @@ struct HomeView: View {
                                             Label("Sil", systemImage: "trash")
                                         }
                                     }
+                                    // sağa kaydırma: takma isim ve kart rengi düzenleme.
+                                    // silmekten bağımsız, karşı kenarda (leading) yaşıyor
+                                    .swipeActions(edge: .leading) {
+                                        Button {
+                                            editingFavorite = favorite
+                                        } label: {
+                                            Label("Düzenle", systemImage: "pencil")
+                                        }
+                                        .tint(.indigo)
+                                    }
                                     // cam efektini satırın arka planına değil kendi içeriğine
                                     // uyguluyorum, yoksa list'in satır kutusu ile cam köşeleri
                                     // tam örtüşmüyor ve kenarlar kaymış görünüyordu
                                     .hiddenListRow(insets: EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                                 }
-                                .onDelete(perform: deleteCity)
+                                .onMove(perform: moveFavorite)
                             }
                         } header: {
                             Text("FAVORİ ŞEHİRLER")
@@ -222,6 +236,11 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showFilter) {
                 WeatherFilterView(filter: $filter, unit: viewModel.preferredUnit)
+            }
+            .sheet(item: $editingFavorite) { favorite in
+                EditFavoriteSheet(favorite: favorite) { nickname, colorName in
+                    viewModel.updateFavorite(id: favorite.id, nickname: nickname, accentColorName: colorName)
+                }
             }
             .onAppear {
                 locationManager.requestLocation()
@@ -333,13 +352,10 @@ struct HomeView: View {
         .buttonStyle(PlainButtonStyle())
     }
 
-    func deleteCity(at offsets: IndexSet) {
-        let citiesToRemove = offsets.map { viewModel.savedCities[$0] }
-        for favorite in citiesToRemove {
-            withAnimation {
-                viewModel.toggleFavorite(name: favorite.name, weather: nil)
-            }
-        }
+    // favori kartlarını sürükleyip bırakarak (kaydırmadan tamamen bağımsız,
+    // her satırın kendi standart sürükleme tutamacı üzerinden) yeniden sıralama
+    private func moveFavorite(from source: IndexSet, to destination: Int) {
+        viewModel.savedCities.move(fromOffsets: source, toOffset: destination)
     }
 }
 

@@ -12,23 +12,24 @@ import SwiftUI
 // ve dönen bir çark gösteriyorum. veri geldiyse aynı görünümü tekrar yazmak
 // yerine paylaşılan CityWeatherRow bileşenini kullanıyorum
 struct FavoriteCityRow: View {
-    let city: String
+    let favorite: FavoriteCity
     let snapshot: CityWeather?
     let unit: TemperatureUnit
 
     var body: some View {
         if let snapshot {
             CityWeatherRow(
-                name: city,
+                name: favorite.displayName,
                 temperature: snapshot.temperature,
                 systemIconName: snapshot.systemIconName,
                 unit: unit,
                 timezoneOffsetSeconds: snapshot.timezoneOffsetSeconds,
-                conditionCode: snapshot.conditionCode
+                conditionCode: snapshot.conditionCode,
+                accentColor: favorite.accentColor
             )
         } else {
             HStack {
-                Text(city.capitalized)
+                Text(favorite.displayName.capitalized)
                     .font(.weatherRowTitle)
                     .foregroundColor(.white)
 
@@ -39,7 +40,7 @@ struct FavoriteCityRow: View {
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 16)
-            .weatherGlassCard(cornerRadius: 18)
+            .weatherGlassCard(cornerRadius: 18, accentTint: favorite.accentColor)
         }
     }
 }

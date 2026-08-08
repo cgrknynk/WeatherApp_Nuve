@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - hava kalitesi
 // api'nin ayrı ve ücretsiz kirlilik servisinden gelen endeksi (1: iyi, 5: çok
 // kötü) ekranda göstermek için hazırladığım küçük model
-struct AirQuality: Equatable {
+struct AirQuality {
     let aqi: Int
 
     // bu metin ekrana Text(airQuality.label) gibi bir değişken üzerinden

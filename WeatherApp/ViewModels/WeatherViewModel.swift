@@ -5,7 +5,6 @@ import Combine
 struct HourlyForecast {
     let time: Date
     let temperature: Double
-    let pop: Double
 }
 
 // MARK: - ekranın durumları
@@ -179,6 +178,15 @@ final class WeatherViewModel: ObservableObject {
 
     func isFavorite(_ city: String) -> Bool {
         savedCities.contains { $0.name.caseInsensitiveCompare(city) == .orderedSame }
+    }
+
+    // EditFavoriteSheet'ten gelen takma isim/renk değişikliğini kalıcı
+    // favoriye yazıyorum. `savedCities` zaten didSet'inde diske kaydediyor,
+    // burada ekstra bir persist çağrısına gerek yok
+    func updateFavorite(id: String, nickname: String?, accentColorName: String?) {
+        guard let index = savedCities.firstIndex(where: { $0.id == id }) else { return }
+        savedCities[index].nickname = nickname
+        savedCities[index].accentColorName = accentColorName
     }
 
     // bir şehrin taze verisi her geldiğinde (fetchWeather içinden) çağrılıyor,

@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - "ilginç bilgi" kartında gösterilecek veri
-struct CityFact: Equatable {
+struct CityFact {
     let title: String
     let extract: String
     let thumbnailURL: URL?

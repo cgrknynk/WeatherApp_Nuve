@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - "ilginç bilgi" kartının üç hâli
 // yükleniyor / bulundu / bulunamadı — sheet bu üçünü ayrı ayrı gösteriyor
-private enum FactLoadState: Equatable {
+private enum FactLoadState {
     case loading
     case found(CityFact)
     case notFound

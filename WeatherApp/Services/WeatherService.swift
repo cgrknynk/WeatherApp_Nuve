@@ -52,8 +52,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
     struct Hourly: Codable {
         let time: [String]
         let temperature_2m: [Double]
-        let precipitation_probability: [Double]
-        let weather_code: [Int]
     }
 
     struct Daily: Codable {
@@ -188,7 +186,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         let urlString = "https://api.open-meteo.com/v1/forecast"
             + "?latitude=\(identity.lat)&longitude=\(identity.lon)"
             + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,pressure_msl,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
-            + "&hourly=temperature_2m,precipitation_probability,weather_code"
+            + "&hourly=temperature_2m"
             + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
             + "&minutely_15=precipitation&forecast_minutely_15=8"
             + "&timezone=auto&wind_speed_unit=kmh&forecast_days=7&forecast_hours=24"
@@ -242,8 +240,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             guard let date = dateTimeFormatter.date(from: decoded.hourly.time[index]) else { return nil }
             return HourlyForecast(
                 time: date,
-                temperature: decoded.hourly.temperature_2m[index],
-                pop: decoded.hourly.precipitation_probability[index] / 100
+                temperature: decoded.hourly.temperature_2m[index]
             )
         }
 
