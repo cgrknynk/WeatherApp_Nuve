@@ -70,7 +70,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
     let minutely_15: Minutely15?
 
     struct Minutely15: Codable {
-        let time: [String]
         let precipitation: [Double]
     }
 }
@@ -206,7 +205,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         let dateTimeFormatter = Self.formatter(dateFormat: "yyyy-MM-dd'T'HH:mm", timeZone: timeZone)
         let dayFormatter = Self.formatter(dateFormat: "yyyy-MM-dd", timeZone: timeZone)
 
-        let primaryConditionCode = WMOWeatherCode.legacyConditionCode(for: decoded.current.weather_code)
+        let conditionCode = WMOWeatherCode.legacyConditionCode(for: decoded.current.weather_code)
 
         let current = CityWeather(
             name: identity.name,
@@ -219,8 +218,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             sunrise: decoded.daily.sunrise.first.flatMap(dateTimeFormatter.date(from:)),
             sunset: decoded.daily.sunset.first.flatMap(dateTimeFormatter.date(from:)),
             conditionDescription: WMOWeatherCode.localizedDescription(for: decoded.current.weather_code),
-            conditionCode: primaryConditionCode,
-            conditionCodes: [primaryConditionCode],
+            conditionCode: conditionCode,
             humidity: decoded.current.relative_humidity_2m,
             windSpeed: decoded.current.wind_speed_10m,
             windDeg: decoded.current.wind_direction_10m,

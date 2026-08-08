@@ -26,11 +26,7 @@ struct CityWeather: Codable, Equatable {
     let sunset: Date?
 
     let conditionDescription: String
-    let conditionCode: Int // ekrandaki ikonu ve arka plan rengini bu kod belirliyor
-    // api bazen aynı anda birden fazla hava durumu döndürüyor, mesela kar+sis gibi.
-    // birinci eleman zaten conditionCode ile aynı, geri kalanları arka plandaki
-    // parçacık efektleri için kullanıyorum ki ikisi de aynı anda görünebilsin
-    let conditionCodes: [Int]
+    let conditionCode: Int // ekrandaki ikonu, arka plan rengini ve parçacık efektini bu kod belirliyor
     let humidity: Int
     let windSpeed: Double
     let windDeg: Int? // rüzgarın yönü, ekrandaki küçük pusula okuna bunu veriyorum

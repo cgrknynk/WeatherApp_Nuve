@@ -80,7 +80,7 @@ enum WeatherParticleStyle: Hashable {
     case fog
     case none
 
-    private static func style(forConditionCode conditionCode: Int, isNight: Bool) -> WeatherParticleStyle {
+    static func style(forConditionCode conditionCode: Int, isNight: Bool) -> WeatherParticleStyle {
         switch conditionCode {
         case 200...232: return .storm
         case 300...531: return .rain
@@ -90,21 +90,6 @@ enum WeatherParticleStyle: Hashable {
         case 801...804: return .clouds
         default: return .none
         }
-    }
-
-    // api bazen aynı anda birden fazla durum döndürüyor (kar + sis gibi). o
-    // yüzden tek bir stil yerine, elimdeki tüm kodlara bakıp tekrarsız bir
-    // stil listesi çıkarıyorum, böylece iki katman aynı anda gösterilebiliyor.
-    // çoğu zaman zaten tek durum olacak, o da sorunsuz çalışıyor
-    static func styles(forConditionCodes codes: [Int], isNight: Bool) -> [WeatherParticleStyle] {
-        var uniqueStyles: [WeatherParticleStyle] = []
-        for code in codes {
-            let style = style(forConditionCode: code, isNight: isNight)
-            if style != .none, !uniqueStyles.contains(style) {
-                uniqueStyles.append(style)
-            }
-        }
-        return uniqueStyles
     }
 }
 
@@ -294,19 +279,15 @@ struct LightningFlashOverlay: View {
 }
 
 // MARK: - parçacık alanı
-// bir şehrin birden fazla durumu varsa (nadir ama oluyor), her stil için ayrı
-// bir katman üst üste bindiriliyor, kar+sis aynı anda görünebiliyor. fırtınada
-// ayrıca şimşek flaşı da ekleniyor
+// fırtınada parçacıklara ek olarak şimşek flaşı da ekleniyor
 struct WeatherParticleField: View {
-    let styles: [WeatherParticleStyle]
+    let style: WeatherParticleStyle
     let windDeg: Int?
 
     var body: some View {
         ZStack {
-            ForEach(styles, id: \.self) { style in
-                WeatherParticleLayer(style: style, windDeg: windDeg)
-            }
-            if styles.contains(.storm) {
+            WeatherParticleLayer(style: style, windDeg: windDeg)
+            if style == .storm {
                 LightningFlashOverlay()
             }
         }
@@ -388,20 +369,18 @@ struct AmbientBackgroundView: View {
 // katmanını ekliyor. bu zengin arka plan sadece şehir detay ekranında var,
 // ana ekran daha sade bir gradyanla kalıyor (pil ömrü ve göz karmaşası için)
 struct WeatherBackground: View {
-    let conditionCodes: [Int]
+    let conditionCode: Int
     let isNight: Bool
     let windDeg: Int?
 
-    private var primaryConditionCode: Int { conditionCodes.first ?? 800 }
-
-    private var particleStyles: [WeatherParticleStyle] {
-        WeatherParticleStyle.styles(forConditionCodes: conditionCodes, isNight: isNight)
+    private var particleStyle: WeatherParticleStyle {
+        WeatherParticleStyle.style(forConditionCode: conditionCode, isNight: isNight)
     }
 
     var body: some View {
         ZStack {
-            AmbientBackgroundView(colors: WeatherPalette.colors(conditionCode: primaryConditionCode, isNight: isNight))
-            WeatherParticleField(styles: particleStyles, windDeg: windDeg)
+            AmbientBackgroundView(colors: WeatherPalette.colors(conditionCode: conditionCode, isNight: isNight))
+            WeatherParticleField(style: particleStyle, windDeg: windDeg)
         }
     }
 }

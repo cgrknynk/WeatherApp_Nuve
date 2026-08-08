@@ -53,7 +53,7 @@ struct WeatherView: View {
     var body: some View {
         ZStack {
             WeatherBackground(
-                conditionCodes: currentWeather?.conditionCodes ?? [800],
+                conditionCode: currentWeather?.conditionCode ?? 800,
                 isNight: currentWeather?.isNight ?? false,
                 windDeg: currentWeather?.windDeg
             )

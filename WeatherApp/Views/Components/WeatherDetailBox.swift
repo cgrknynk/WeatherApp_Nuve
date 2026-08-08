@@ -15,7 +15,7 @@ struct WeatherDetailBox: View {
     var icon: String
     // apple'ın kendi detay kartlarında olduğu gibi her ikon kendi anlamına
     // uygun bir renk taşıyor (nem mavi, basınç mor gibi), düz beyazdan daha canlı duruyor
-    var iconColor: Color = .white
+    var iconColor: Color
     var title: LocalizedStringKey
     var value: String
 
