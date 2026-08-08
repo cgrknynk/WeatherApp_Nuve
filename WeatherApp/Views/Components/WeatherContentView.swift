@@ -136,21 +136,24 @@ struct WeatherContentView: View {
                 // durumu uygulamasında olmayan, ikisini bir arada sunan
                 // özgün bir dokunuş
                 VStack(alignment: .leading, spacing: 10) {
+                    // rengi sadece ikona veriyoruz, yazı uygulamanın her
+                    // yerdeki aynı normal beyaz metin rengiyle kalıyor —
+                    // sadece ikon rengiyle ayrışması daha şık duruyor
                     if let nowcast = weather.precipitationNowcast {
                         Label {
                             Text(nowcast)
                         } icon: {
                             Image(systemName: "cloud.rain.fill")
+                                .foregroundColor(.cyan)
                         }
-                        .foregroundColor(.cyan)
                     }
 
                     Label {
                         Text(weather.outfitSuggestion)
                     } icon: {
                         Image(systemName: "tshirt.fill")
+                            .foregroundColor(.orange)
                     }
-                    .foregroundColor(.orange)
                 }
                 .font(.weatherCaption.bold())
                 .foregroundColor(.white)

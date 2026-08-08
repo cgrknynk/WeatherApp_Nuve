@@ -42,9 +42,11 @@ struct WindDetailBox: View {
             }
 
             // api bazen rüzgar hamlesini de veriyor, önceden hiç okumuyordum.
-            // sadece anlamlı bir değer varsa gösteriyorum
+            // sadece anlamlı bir değer varsa gösteriyorum. "hamle" tek başına
+            // ne olduğu anlaşılmayan bir meteoroloji terimi olduğu için, ne
+            // olduğunu açıklayan bir kelime daha ekledik ("ani rüzgar")
             if let gustKmh, gustKmh > speedKmh {
-                Text(String(format: String(localized: "wind.gust_format", defaultValue: "Hamle: %@"), unit.format(gustKmh)))
+                Text(String(format: String(localized: "wind.gust_format", defaultValue: "Ani rüzgar hamlesi: %@"), unit.format(gustKmh)))
                     .font(.weatherCaption)
                     .foregroundColor(.white.opacity(0.6))
             }
