@@ -52,9 +52,14 @@ struct WeatherContentView: View {
                         .foregroundColor(.white)
                         .padding(.top, 40)
 
-                    Text(weather.localizedCountryName)
-                        .font(.weatherCaption)
-                        .foregroundColor(.white.opacity(0.6))
+                    // antarktika gibi resmi bir ülkesi olmayan yerlerde bu boş
+                    // geliyor, boşken hiç göstermiyoruz ki altında anlamsız bir
+                    // boşluk kalmasın
+                    if !weather.localizedCountryName.isEmpty {
+                        Text(weather.localizedCountryName)
+                            .font(.weatherCaption)
+                            .foregroundColor(.white.opacity(0.6))
+                    }
 
                     // şehrin o anki yerel saati, dakikada bir kendini tazeliyor.
                     // küçük bir cam hap içinde, diğer küçük yazılardan bilerek

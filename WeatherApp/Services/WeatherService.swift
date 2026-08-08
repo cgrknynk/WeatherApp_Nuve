@@ -20,7 +20,9 @@ private nonisolated struct LocationIdentityResponse: Codable {
     let sys: Sys
 
     struct Coord: Codable { let lat: Double; let lon: Double }
-    struct Sys: Codable { let country: String }
+    // ülke kodu her zaman gelmiyor - antarktika gibi resmi bir ülkesi olmayan
+    // yerlerde bu alan api cevabında hiç bulunmuyor, o yüzden opsiyonel
+    struct Sys: Codable { let country: String? }
 }
 
 // MARK: - "ne durumda" sorusunun cevabı
@@ -165,7 +167,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
 
         return LocationIdentity(
             name: decoded.name,
-            country: decoded.sys.country,
+            country: decoded.sys.country ?? "",
             lat: decoded.coord.lat,
             lon: decoded.coord.lon
         )
