@@ -5,7 +5,7 @@
 //  Created by Çağrı Kaan YANIK on 29.07.2026.
 //
 
-import SwiftUI
+import Foundation
 
 // MARK: - filtrede seçilebilen kaba hava durumu kategorileri
 // diğer yerlerdeki ince ayrımlardan (drizzle, rain, storm gibi) bilerek daha

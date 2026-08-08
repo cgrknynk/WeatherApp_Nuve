@@ -41,9 +41,22 @@ struct HomeView: View {
                 // rengindeydi, konumun gerçek havası ne olursa olsun. artık
                 // mevcut konumun GERÇEK anlık koduna göre boyanıyor (veri
                 // henüz gelmediyse aynı eski sabit değere düşüyor)
+                //
+                // yaşanan bir hata: gece/gündüz burada eskiden mevcut konumun
+                // KENDİ saatine göre belirleniyordu (currentLocationWeather?.isNight).
+                // konum uzak bir saat diliminde (mesela gündüz olan bir yerde)
+                // ise, telefonda saat gece yarısına yakın olup üstteki "İyi
+                // Geceler" selamlaması gösterilirken, arka plan yine de PARLAK
+                // gündüz renklerine boyanıyordu — selamlama ile arka planın
+                // birbirine ters düşmesi kullanıcıya çelişki gibi göründü. bu
+                // ekran kullanıcının KENDİ günü hakkında bir selamlama (bkz.
+                // yukarıdaki "greeting"), o yüzden gece/gündüz de HER ZAMAN
+                // telefonun kendi saatine göre (isCurrentlyNight) belirleniyor;
+                // sadece renk TONU (açık/kapalı/yağmurlu gibi) mevcut konumun
+                // gerçek koduna göre kalıyor
                 AmbientBackgroundView(colors: WeatherPalette.colors(
                     conditionCode: currentLocationWeather?.conditionCode ?? 800,
-                    isNight: currentLocationWeather?.isNight ?? WeatherPalette.isCurrentlyNight
+                    isNight: WeatherPalette.isCurrentlyNight
                 ))
                 .ignoresSafeArea()
 
