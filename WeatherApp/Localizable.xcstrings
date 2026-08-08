@@ -1737,13 +1737,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Slightly humid"
+            "value": "Slightly heavy"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "new",
-            "value": "Hafif nemli"
+            "value": "Hafif ağır"
           }
         }
       }
@@ -1754,13 +1754,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Humid"
+            "value": "Heavy"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "new",
-            "value": "Nemli"
+            "value": "Ağır"
           }
         }
       }
@@ -1795,6 +1795,40 @@
           "stringUnit": {
             "state": "new",
             "value": "Aydınlanma: %@"
+          }
+        }
+      }
+    },
+    "feels_like.warmer_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° warmer"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° daha sıcak"
+          }
+        }
+      }
+    },
+    "feels_like.cooler_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° cooler"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° daha serin"
           }
         }
       }

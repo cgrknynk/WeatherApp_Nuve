@@ -52,6 +52,10 @@ private nonisolated struct OpenMeteoResponse: Codable {
     struct Hourly: Codable {
         let time: [String]
         let temperature_2m: [Double]
+        // basınç/nem trend oklarını hesaplamak için — "şimdi" (index 0) ile
+        // "3 saat sonra" (index 3) arasındaki farka bakıyoruz
+        let pressure_msl: [Double]
+        let relative_humidity_2m: [Int]
     }
 
     struct Daily: Codable {
@@ -185,7 +189,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         let urlString = "https://api.open-meteo.com/v1/forecast"
             + "?latitude=\(identity.lat)&longitude=\(identity.lon)"
             + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,pressure_msl,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
-            + "&hourly=temperature_2m"
+            + "&hourly=temperature_2m,pressure_msl,relative_humidity_2m"
             + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
             + "&minutely_15=precipitation&forecast_minutely_15=8"
             + "&timezone=auto&wind_speed_unit=kmh&forecast_days=7&forecast_hours=24"
@@ -228,7 +232,9 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             lat: identity.lat,
             lon: identity.lon,
             timezoneOffsetSeconds: decoded.utc_offset_seconds,
-            precipitationNowcast: Self.nowcastMessage(from: decoded.minutely_15)
+            precipitationNowcast: Self.nowcastMessage(from: decoded.minutely_15),
+            pressureTrend: Self.trend(from: decoded.hourly.pressure_msl, threshold: 1),
+            humidityTrend: Self.trend(from: decoded.hourly.relative_humidity_2m.map(Double.init), threshold: 3)
         )
 
         // forecast_hours=24 dediğim için open-meteo şu anki saatten itibaren
@@ -318,6 +324,19 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         }
 
         return String(localized: "nowcast.clear", defaultValue: "Önümüzdeki 2 saat içinde yağış beklenmiyor")
+    }
+
+    // MARK: - basınç/nem trend oku
+    // "şimdi" (index 0) ile "3 saat sonra" (index 3) arasındaki farka bakıp
+    // yükseliyor/düşüyor/sabit diyoruz — yeni bir ağ isteği gerekmiyor,
+    // zaten çekilen saatlik veriden. eşik altındaki ufak dalgalanmaları
+    // (ölçüm gürültüsü) "sabit" sayıp gereksiz ok göstermiyoruz
+    private static func trend(from values: [Double], threshold: Double) -> WeatherTrend? {
+        guard values.count > 3 else { return nil }
+        let delta = values[3] - values[0]
+        if delta > threshold { return .rising }
+        if delta < -threshold { return .falling }
+        return .steady
     }
 
     private static func formatter(dateFormat: String, timeZone: TimeZone) -> DateFormatter {

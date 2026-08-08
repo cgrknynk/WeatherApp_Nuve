@@ -225,7 +225,13 @@ struct WeatherContentView: View {
                             .frame(height: 120)
                             .chartXAxis {
                                 AxisMarks(values: .stride(by: .hour, count: 3)) { _ in
-                                    AxisValueLabel(format: .dateTime.hour())
+                                    // burada saat dilimini AÇIKÇA belirtmezsek, swiftui varsayılan
+                                    // olarak cihazın kendi saat dilimini kullanıyor — türkiye'ye
+                                    // yakın şehirlerde fark etmiyordu ama arizona/şili gibi uzak
+                                    // saat dilimlerinde eksendeki saatler şehrin gerçek yerel
+                                    // saatiyle uyuşmuyordu (grafiğin üstündeki "şu an" etiketi zaten
+                                    // cityTimeZone kullanıyordu, eksen etiketleri kullanmıyordu)
+                                    AxisValueLabel(format: Date.FormatStyle(timeZone: cityTimeZone).hour())
                                         .foregroundStyle(.white)
                                 }
                             }
@@ -284,11 +290,11 @@ struct WeatherContentView: View {
                 // alt kısım, detay kutuları ızgarası
                 GlassEffectContainer {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel)
+                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel, trend: weather.humidityTrend)
                         WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
 
                         WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike), note: weather.feelsLikeDeltaLabel)
-                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa", note: weather.pressureLabel)
+                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa", note: weather.pressureLabel, trend: weather.pressureTrend)
 
                         WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km", note: weather.visibilityLabel)
                         WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted, note: weather.cloudinessLabel)

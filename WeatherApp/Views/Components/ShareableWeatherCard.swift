@@ -83,7 +83,8 @@ struct ShareableWeatherCard: View {
             visibility: 10000, cloudiness: 20, sunrise: nil, sunset: nil,
             conditionDescription: "Az Bulutlu", conditionCode: 801,
             humidity: 55, windSpeed: 12, windDeg: 90, windGust: nil, tempMin: 19, tempMax: 27,
-            lat: 38.4, lon: 27.1, timezoneOffsetSeconds: 10800, precipitationNowcast: nil
+            lat: 38.4, lon: 27.1, timezoneOffsetSeconds: 10800, precipitationNowcast: nil,
+            pressureTrend: nil, humidityTrend: nil
         ),
         unit: .celsius
     )

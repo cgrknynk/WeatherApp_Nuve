@@ -22,6 +22,9 @@ struct WeatherDetailBox: View {
     // etiket ("Rahat"/"Kuru" gibi) sayının ne anlama geldiğini ekliyor.
     // opsiyonel: her kutunun anlamlı bir yorumu olmayabilir
     var note: String? = nil
+    // basınç/nem gibi kısa vadeli değerlerin yönünü gösteren küçük ok —
+    // sadece bunu destekleyen kutular veriyor (bkz. WeatherContentView)
+    var trend: WeatherTrend? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -34,9 +37,17 @@ struct WeatherDetailBox: View {
                     .foregroundColor(.white.opacity(0.7))
             }
 
-            Text(value)
-                .font(.weatherCardValue)
-                .foregroundColor(.white)
+            HStack(spacing: 5) {
+                Text(value)
+                    .font(.weatherCardValue)
+                    .foregroundColor(.white)
+
+                if let trend {
+                    Image(systemName: trend.systemImageName)
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundColor(iconColor)
+                }
+            }
 
             if let note {
                 Text(note)

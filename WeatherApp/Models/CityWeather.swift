@@ -49,6 +49,12 @@ struct CityWeather: Codable, Equatable {
     // kendisi hesaplayıp burada hazır bir metin olarak bırakıyor (bkz. o dosya)
     let precipitationNowcast: String?
 
+    // basınç/nem kutularındaki küçük trend oku için — "şimdi" ile "3 saat
+    // sonrası" arasındaki farka bakarak WeatherService tarafından hesaplanıyor.
+    // saatlik veri çok kısaysa (aşırı nadir) nil kalıp ok hiç gösterilmiyor
+    let pressureTrend: WeatherTrend?
+    let humidityTrend: WeatherTrend?
+
     // şu an gece mi gündüz mü, gündoğumu/günbatımı saatlerine bakarak anlıyorum.
     // arka plan rengi ve ikon (güneş mi ay mı) buna göre değişiyor
     var isNight: Bool {
@@ -174,8 +180,13 @@ struct CityWeather: Codable, Equatable {
     // fark 2°'yi geçince görünüyor, bu rozet HER ZAMAN görünüyor
     var feelsLikeDeltaLabel: String {
         let delta = Int((feelsLike - temperature).rounded())
-        if delta == 0 { return String(localized: "feels_like.same", defaultValue: "Gerçek sıcaklıkla aynı") }
-        return delta > 0 ? "+\(delta)°" : "\(delta)°"
+        if delta == 0 {
+            return String(localized: "feels_like.same", defaultValue: "Gerçek sıcaklıkla aynı")
+        }
+        let format = delta > 0
+            ? String(localized: "feels_like.warmer_format", defaultValue: "%d° daha sıcak")
+            : String(localized: "feels_like.cooler_format", defaultValue: "%d° daha serin")
+        return String(format: format, abs(delta))
     }
 
     var pressureLabel: String {
@@ -207,13 +218,18 @@ struct CityWeather: Codable, Equatable {
 
     // çiğ noktası, standart meteorolojik "nem konforu" ölçeğine göre
     // yorumlanıyor — nem yüzdesinden daha güvenilir bir konfor göstergesi,
-    // çünkü sıcaklığı da hesaba katıyor (magnus-tetens formülü zaten öyle)
+    // çünkü sıcaklığı da hesaba katıyor (magnus-tetens formülü zaten öyle).
+    // bilerek "kuru/nemli" yerine "hafif ağır/ağır" gibi farklı kelimeler
+    // kullanıyorum: örneğin çölde %22 bağıl nem (NEM kutusu "Kuru" der) ile
+    // 16° çiğ noktası (mutlak nem yüksek) AYNI ANDA doğru olabiliyor — ikisi
+    // farklı şeyi ölçüyor. iki kutu da "nemli/kuru" kelimesini kullanırsa
+    // kullanıcıya çelişki gibi görünüyor, kelimeleri ayırınca bu kalkıyor
     var dewPointComfortLabel: String {
         switch dewPoint {
         case ..<10: return String(localized: "dew_point.dry", defaultValue: "Kuru")
         case 10..<16: return String(localized: "dew_point.comfortable", defaultValue: "Rahat")
-        case 16..<19: return String(localized: "dew_point.slightly_humid", defaultValue: "Hafif nemli")
-        case 19..<23: return String(localized: "dew_point.humid", defaultValue: "Nemli")
+        case 16..<19: return String(localized: "dew_point.slightly_humid", defaultValue: "Hafif ağır")
+        case 19..<23: return String(localized: "dew_point.humid", defaultValue: "Ağır")
         default: return String(localized: "dew_point.oppressive", defaultValue: "Bunaltıcı")
         }
     }
@@ -222,6 +238,21 @@ struct CityWeather: Codable, Equatable {
     // Hilal") birlikte, "ne kadar" sorusuna da sayısal bir cevap veriyor
     var moonIlluminationPercent: Int {
         MoonPhase.illuminationPercent(for: sunset ?? Date())
+    }
+}
+
+// MARK: - basınç/nem gibi kısa vadeli bir değerin yönü
+// WeatherService bunu saatlik veriden hesaplıyor, detay kutuları da küçük
+// bir ok ikonu olarak gösteriyor (bkz. Views/Components/WeatherDetailBox.swift)
+enum WeatherTrend: Codable {
+    case rising, falling, steady
+
+    var systemImageName: String {
+        switch self {
+        case .rising: return "arrow.up.right"
+        case .falling: return "arrow.down.right"
+        case .steady: return "arrow.right"
+        }
     }
 }
 
