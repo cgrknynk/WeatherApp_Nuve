@@ -60,7 +60,7 @@ enum WeatherConditionCategory: String, CaseIterable, Identifiable {
 // hem hava durumu kategorisine hem sıcaklık aralığına göre filtreliyorum.
 // sıcaklığı her zaman celsius olarak tutuyorum, kullanıcının seçtiği birime
 // sadece ekranda gösterirken çeviriyorum, uygulamanın her yerinde yaptığım gibi
-struct WeatherFilter: Equatable {
+struct WeatherFilter {
     var categories: Set<WeatherConditionCategory> = []
     var minTemperatureCelsius: Double = -30
     var maxTemperatureCelsius: Double = 50

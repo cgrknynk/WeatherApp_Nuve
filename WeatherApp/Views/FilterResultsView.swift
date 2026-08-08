@@ -68,17 +68,7 @@ struct FilterResultsView: View {
                     ForEach(groups) { group in
                         Section {
                             ForEach(group.cities) { city in
-                                NavigationLink(destination: WeatherView(location: city.location, zoomNamespace: zoomNamespace)) {
-                                    CityWeatherRow(
-                                        name: city.name,
-                                        temperature: city.temperature,
-                                        systemIconName: city.systemIconName,
-                                        unit: unit
-                                    )
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                                .matchedTransitionSource(id: city.name, in: zoomNamespace)
-                                .hiddenListRow(insets: EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                                cityRow(city)
                             }
                         } header: {
                             // ülke adı artık sadece bir başlık, dokunulabilir bir satır değil
@@ -103,11 +93,26 @@ struct FilterResultsView: View {
         .onChange(of: viewModel.favoriteSnapshots) { _, _ in recomputeGroups() }
         .onChange(of: viewModel.savedCities) { _, _ in recomputeGroups() }
     }
+
+    @ViewBuilder
+    private func cityRow(_ city: FilteredCity) -> some View {
+        NavigationLink(destination: WeatherView(location: city.location, zoomNamespace: zoomNamespace)) {
+            CityWeatherRow(
+                name: city.name,
+                temperature: city.temperature,
+                systemIconName: city.systemIconName,
+                unit: unit
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+        .matchedTransitionSource(id: city.name, in: zoomNamespace)
+        .hiddenListRow(insets: EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+    }
 }
 
 // MARK: - filtre sonucu modelleri
 // sadece ekranda göstermek için gereken bilgiyi tutuyorum, tüm CityWeather'ı değil
-struct FilteredCity: Identifiable, Hashable {
+struct FilteredCity: Identifiable {
     let name: String
     let temperature: Double
     let systemIconName: String
@@ -116,7 +121,7 @@ struct FilteredCity: Identifiable, Hashable {
     var id: String { name }
 }
 
-struct CountryGroup: Identifiable, Hashable {
+struct CountryGroup: Identifiable {
     let country: String
     let cities: [FilteredCity]
     var id: String { country }

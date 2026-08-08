@@ -8,7 +8,7 @@ struct HourlyForecast {
 }
 
 // MARK: - ekranın durumları
-enum WeatherViewState: Equatable {
+enum WeatherViewState {
     case idle
     case loading
     case success(CityWeather)
@@ -21,13 +21,6 @@ enum WeatherViewState: Equatable {
 enum TemperatureUnit: String {
     case celsius
     case fahrenheit
-
-    var symbol: String {
-        switch self {
-        case .celsius: return "°C"
-        case .fahrenheit: return "°F"
-        }
-    }
 
     func format(_ celsius: Double) -> String {
         switch self {

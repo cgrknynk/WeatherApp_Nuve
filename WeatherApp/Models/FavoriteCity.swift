@@ -15,7 +15,7 @@ import SwiftUI
 // biraz farklı bir sıcaklık göstermesine yol açıyordu. çözüm: favori eklenirken
 // o anki doğru koordinatı da kalıcı olarak saklıyorum, bir daha asla isimle
 // yeniden aramıyorum
-struct FavoriteCity: Codable, Hashable, Identifiable {
+struct FavoriteCity: Codable, Equatable, Identifiable {
     let name: String
     let lat: Double?
     let lon: Double?

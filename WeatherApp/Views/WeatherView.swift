@@ -1,5 +1,4 @@
 import SwiftUI
-import Charts
 import UIKit
 
 // MARK: - şehir detay ekranı
