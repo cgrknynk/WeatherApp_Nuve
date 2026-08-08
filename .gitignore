@@ -6,3 +6,9 @@ build/
 
 # api anahtarı, asla git'e girmemeli
 WeatherApp/Services/Secrets.swift
+
+# kişisel notlar/dökümanlar, sadece bilgisayarda kalsın, GitHub'a gitmesin
+Kod-Rehberi.md
+Satir-Satir-Kod-Aciklamasi.md
+Ekrana-Yansiyan-Kod.md
+Dokumantasyon-Gorseller/
