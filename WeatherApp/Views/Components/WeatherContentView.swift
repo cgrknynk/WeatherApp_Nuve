@@ -23,6 +23,11 @@ struct WeatherContentView: View {
     let lastUpdated: Date?
     let onRefresh: () -> Void
 
+    // ilginç bilgi kartının açık olup olmadığı — bu view'ın dışına hiçbir
+    // etkisi yok, tamamen kendi içinde başlayıp kendi içinde bitiyor, o
+    // yüzden "durumsuz" ilkesini bozmuyor
+    @State private var showCityFact = false
+
     // şehrin kendi saat dilimi. hem günlük tahmindeki "bugün/yarın" hesabı hem
     // de aşağıdaki canlı saat gösterimi bunu kullanıyor, telefonun saatini değil
     private var cityTimeZone: TimeZone {
@@ -208,6 +213,22 @@ struct WeatherContentView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         sectionHeader("ÖNÜMÜZDEKİ GÜNLER", icon: "calendar")
 
+                        // 7 günün içinden, yağış olasılığı en düşük ve havası
+                        // en açık olanı öne çıkarıyorum — hiçbir hava durumu
+                        // uygulamasının doğrudan söylemediği bir öneri
+                        if let bestDay = daily.bestOutdoorDay {
+                            HStack(spacing: 6) {
+                                Image(systemName: "checkmark.seal.fill")
+                                Text(String(
+                                    format: String(localized: "weather.best_day_format", defaultValue: "Dışarı çıkmak için en iyi gün: %@"),
+                                    RelativeDayFormatter.label(for: bestDay.date, calendar: cityCalendar)
+                                ))
+                            }
+                            .font(.weatherCaption.bold())
+                            .foregroundColor(.green.opacity(0.9))
+                            .padding(.horizontal, 5)
+                        }
+
                         VStack(spacing: 12) {
                             ForEach(daily) { day in
                                 DailyForecastRow(day: day, calendar: cityCalendar, unit: unit)
@@ -242,7 +263,21 @@ struct WeatherContentView: View {
                         WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted)
 
                         WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint))
-                        SunTimesBox(sunrise: weather.sunrise, sunset: weather.sunset)
+                        SunTimesBox(
+                            sunrise: weather.sunrise,
+                            sunset: weather.sunset,
+                            sunsetQualityScore: weather.sunsetQualityScore,
+                            sunsetQualityLabel: weather.sunsetQualityLabel
+                        )
+
+                        // o geceki ay evresi, hiçbir yeni ağ isteği gerekmiyor,
+                        // tamamen tarihten hesaplanıyor (bkz. Utilities/MoonPhase.swift)
+                        WeatherDetailBox(
+                            icon: weather.moonPhase.systemImageName,
+                            iconColor: .indigo,
+                            title: "AY EVRESİ",
+                            value: weather.moonPhase.localizedName
+                        )
                     }
                 }
                 .padding(.horizontal, 20)
@@ -251,6 +286,33 @@ struct WeatherContentView: View {
         }
         .refreshable { onRefresh() }
         .sensoryFeedback(.success, trigger: lastUpdated)
+        // ekranın sağ üst köşesinde, kaydırma sırasında yerinde sabit kalan
+        // (overlay, scrollview'ın kendi çerçevesine bağlı, içeriğe değil)
+        // yüzen bir düğme — apple'ın hava durumu uygulamasında hiç olmayan,
+        // bilerek eklediğim özgün bir dokunuş: o an bakılan şehir/yer
+        // hakkında vikipedi'den küçük bir "ilginç bilgi" gösteriyor
+        .overlay(alignment: .topTrailing) {
+            cityFactButton
+        }
+        .sheet(isPresented: $showCityFact) {
+            CityFactSheet(cityName: weather.name, countryName: weather.localizedCountryName)
+        }
+    }
+
+    private var cityFactButton: some View {
+        Button {
+            showCityFact = true
+        } label: {
+            Image(systemName: "sparkles")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(.white)
+                .frame(width: 40, height: 40)
+                .background(Circle().fill(.white.opacity(0.16)))
+                .overlay(Circle().strokeBorder(.white.opacity(0.24), lineWidth: 0.75))
+        }
+        .padding(.top, 8)
+        .padding(.trailing, 20)
+        .accessibilityLabel(String(localized: "fact.button_label", defaultValue: "İlginç bilgi göster"))
     }
 
     // MARK: - hissedilen sıcaklık notu

@@ -14,9 +14,14 @@ import SwiftUI
 struct SunTimesBox: View {
     let sunrise: Date?
     let sunset: Date?
+    // 1-10 arası, günbatımının ne kadar "güzel" olabileceğine dair kaba bir
+    // tahmin (bkz. CityWeather.sunsetQualityScore) — hiçbir hava durumu
+    // uygulamasının vermediği, özgün bir dokunuş
+    let sunsetQualityScore: Int
+    let sunsetQualityLabel: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 6) {
                 Image(systemName: "sun.horizon")
                     .font(.weatherCardTitle)
@@ -41,6 +46,14 @@ struct SunTimesBox: View {
             }
             .font(.weatherCaption.bold())
             .foregroundColor(.white)
+
+            HStack(spacing: 5) {
+                Image(systemName: "wand.and.stars")
+                    .font(.caption2)
+                Text("\(sunsetQualityScore)/10 — \(sunsetQualityLabel)")
+                    .font(.caption2.bold())
+            }
+            .foregroundColor(.orange.opacity(0.9))
 
             Spacer()
         }
