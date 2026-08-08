@@ -28,9 +28,11 @@ extension Font {
     // "önümüzdeki günler" gibi bölüm başlıkları, büyük harf ve geniş aralıkla kullanılıyor
     static let weatherSectionHeader = Font.system(.caption, design: .default).weight(.semibold)
 
-    // cam kartların içindeki etiket (sans) ve değer (serif, çünkü hep bir sayı) çifti
+    // cam kartların içindeki etiket (sans) ve değer (serif, çünkü hep bir sayı) çifti.
+    // değer eskiden title2'ydi, kutular altlarında boş yer bırakıyordu — title'a
+    // büyütünce hem kutu daha dolu görünüyor hem sayı ilk bakışta daha net okunuyor
     static let weatherCardTitle = Font.system(.caption, design: .default).weight(.semibold)
-    static let weatherCardValue = Font.system(.title2, design: .serif).weight(.medium)
+    static let weatherCardValue = Font.system(.title, design: .serif).weight(.medium)
 
     // liste satırları (favoriler, arama sonuçları), isim sans, sıcaklık serif
     static let weatherRowTitle = Font.system(.title3, design: .default).weight(.semibold)

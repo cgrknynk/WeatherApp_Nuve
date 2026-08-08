@@ -54,15 +54,30 @@ enum MoonPhase: CaseIterable {
     private static let referenceNewMoon = Date(timeIntervalSince1970: 947_182_440)
     private static let synodicMonthInDays = 29.530588853
 
-    static func phase(for date: Date) -> MoonPhase {
+    // döngünün neresinde olduğumuzu (0 ile sinodik ay uzunluğu arası, gün
+    // cinsinden) hesaplıyor — hem evreyi hem aydınlanma yüzdesini bu tek
+    // sayıdan türetiyoruz
+    private static func age(for date: Date) -> Double {
         let daysSinceReference = date.timeIntervalSince(referenceNewMoon) / 86_400
         var age = daysSinceReference.truncatingRemainder(dividingBy: synodicMonthInDays)
         if age < 0 { age += synodicMonthInDays }
+        return age
+    }
 
+    static func phase(for date: Date) -> MoonPhase {
         // döngüyü (0 ile sinodik ay arası) 8 eşit dilime bölüp, hangi dilime
         // düştüğümüzü buluyoruz. rounded() sayesinde her evrenin "en temsili"
         // anı (mesela tam dolunay günü) kendi diliminin ortasına denk geliyor
-        let sliceIndex = Int((age / synodicMonthInDays * 8).rounded()) % 8
+        let sliceIndex = Int((age(for: date) / synodicMonthInDays * 8).rounded()) % 8
         return allCases[sliceIndex]
+    }
+
+    // aydınlanan yüzeyin yüzdesi — standart bir kozinüs yaklaşıklığı: yeni
+    // ayda (age=0) %0, dolunayda (age=yarım döngü) %100, ikisi arasında
+    // yumuşak bir eğriyle geçiyor. evre ismi ("Küçülen Hilal" gibi) SADECE
+    // 8 kaba kategori veriyordu, bu sayı "ne kadar" sorusuna da cevap veriyor
+    static func illuminationPercent(for date: Date) -> Int {
+        let fraction = (1 - cos(2 * Double.pi * age(for: date) / synodicMonthInDays)) / 2
+        return Int((fraction * 100).rounded())
     }
 }

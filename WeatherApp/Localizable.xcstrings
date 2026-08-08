@@ -1013,13 +1013,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gusts: %@"
+            "value": "Sudden gust: %@"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "new",
-            "value": "Hamle: %@"
+            "value": "Ani hamle: %@"
           }
         }
       }
@@ -1421,6 +1421,380 @@
           "stringUnit": {
             "state": "new",
             "value": "Kaydet"
+          }
+        }
+      }
+    },
+    "humidity.dry": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kuru"
+          }
+        }
+      }
+    },
+    "humidity.comfortable": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Rahat"
+          }
+        }
+      }
+    },
+    "humidity.humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nemli"
+          }
+        }
+      }
+    },
+    "humidity.very_humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very humid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Çok nemli"
+          }
+        }
+      }
+    },
+    "feels_like.same": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as actual temperature"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gerçek sıcaklıkla aynı"
+          }
+        }
+      }
+    },
+    "pressure.low": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low pressure"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alçak basınç"
+          }
+        }
+      }
+    },
+    "pressure.normal": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "pressure.high": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High pressure"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yüksek basınç"
+          }
+        }
+      }
+    },
+    "visibility.fog": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foggy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sisli"
+          }
+        }
+      }
+    },
+    "visibility.limited": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limited visibility"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sınırlı görüş"
+          }
+        }
+      }
+    },
+    "visibility.good": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good visibility"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi görüş"
+          }
+        }
+      }
+    },
+    "visibility.excellent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excellent visibility"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Mükemmel görüş"
+          }
+        }
+      }
+    },
+    "cloudiness.clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear sky"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Açık gökyüzü"
+          }
+        }
+      }
+    },
+    "cloudiness.mostly_clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostly clear"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Az bulutlu"
+          }
+        }
+      }
+    },
+    "cloudiness.partly_cloudy": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partly cloudy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Parçalı bulutlu"
+          }
+        }
+      }
+    },
+    "cloudiness.overcast": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcast"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kapalı"
+          }
+        }
+      }
+    },
+    "dew_point.dry": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kuru"
+          }
+        }
+      }
+    },
+    "dew_point.comfortable": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Rahat"
+          }
+        }
+      }
+    },
+    "dew_point.slightly_humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slightly humid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hafif nemli"
+          }
+        }
+      }
+    },
+    "dew_point.humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nemli"
+          }
+        }
+      }
+    },
+    "dew_point.oppressive": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oppressive"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bunaltıcı"
+          }
+        }
+      }
+    },
+    "moon.illumination_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Illumination: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aydınlanma: %@"
           }
         }
       }

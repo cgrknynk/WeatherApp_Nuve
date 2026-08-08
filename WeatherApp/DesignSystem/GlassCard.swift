@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+// MARK: - detay ızgarasındaki kutuların paylaştığı sabit yükseklik
+// WeatherDetailBox/WindDetailBox/SunTimesBox üçü de bunu kullanmak zorunda,
+// yoksa ızgara satırları hizasız görünür. tek bir yerden geldiği için,
+// birini güncelleyip diğer ikisini unutmak artık mümkün değil
+let weatherDetailBoxHeight: CGFloat = 160
+
 // MARK: - uygulamanın tek tip cam kart efekti
 // eskiden her ekranda ayrı ayrı cam efekti kodu yazıyordum, hem tekrar oluyordu
 // hem de parlak arka planlarda beyaz yazı okunmuyordu. şimdi tek bir yerde

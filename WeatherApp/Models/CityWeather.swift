@@ -152,6 +152,77 @@ struct CityWeather: Codable, Equatable {
         let sentence = parts.joined(separator: ", ")
         return sentence.prefix(1).capitalized + sentence.dropFirst()
     }
+
+    // MARK: - detay kutularının altındaki kısa yorum etiketleri
+    // her kutu tek başına çıplak bir sayı gösteriyordu ("%38", "1008 hPa"
+    // gibi) — sayı doğru ama YORUMSUZ, ne kadar iyi/kötü olduğunu anlamak
+    // için kullanıcının kendi bilgisine güvenmesi gerekiyordu. bunlar hiçbiri
+    // yeni bir api isteği gerektirmiyor, elimizde zaten olan sayıyı standart
+    // meteoroloji eşiklerine göre kısa bir sıfata çeviriyor
+
+    var humidityComfortLabel: String {
+        switch humidity {
+        case ..<30: return String(localized: "humidity.dry", defaultValue: "Kuru")
+        case 30..<60: return String(localized: "humidity.comfortable", defaultValue: "Rahat")
+        case 60..<80: return String(localized: "humidity.humid", defaultValue: "Nemli")
+        default: return String(localized: "humidity.very_humid", defaultValue: "Çok nemli")
+        }
+    }
+
+    // hissedilen sıcaklığın gerçek sıcaklıktan ne kadar farklı olduğu, imzalı
+    // bir sayı olarak ("+3°"/"-2°") — hero'nun altındaki tam cümle sadece
+    // fark 2°'yi geçince görünüyor, bu rozet HER ZAMAN görünüyor
+    var feelsLikeDeltaLabel: String {
+        let delta = Int((feelsLike - temperature).rounded())
+        if delta == 0 { return String(localized: "feels_like.same", defaultValue: "Gerçek sıcaklıkla aynı") }
+        return delta > 0 ? "+\(delta)°" : "\(delta)°"
+    }
+
+    var pressureLabel: String {
+        switch pressure {
+        case ..<1000: return String(localized: "pressure.low", defaultValue: "Alçak basınç")
+        case 1000...1020: return String(localized: "pressure.normal", defaultValue: "Normal")
+        default: return String(localized: "pressure.high", defaultValue: "Yüksek basınç")
+        }
+    }
+
+    // visibility metre cinsinden geliyor, kutuda km'ye çevrilip gösteriliyor
+    var visibilityLabel: String {
+        switch visibility {
+        case ..<1_000: return String(localized: "visibility.fog", defaultValue: "Sisli")
+        case 1_000..<4_000: return String(localized: "visibility.limited", defaultValue: "Sınırlı görüş")
+        case 4_000..<10_000: return String(localized: "visibility.good", defaultValue: "İyi görüş")
+        default: return String(localized: "visibility.excellent", defaultValue: "Mükemmel görüş")
+        }
+    }
+
+    var cloudinessLabel: String {
+        switch cloudiness {
+        case ..<20: return String(localized: "cloudiness.clear", defaultValue: "Açık gökyüzü")
+        case 20..<50: return String(localized: "cloudiness.mostly_clear", defaultValue: "Az bulutlu")
+        case 50..<80: return String(localized: "cloudiness.partly_cloudy", defaultValue: "Parçalı bulutlu")
+        default: return String(localized: "cloudiness.overcast", defaultValue: "Kapalı")
+        }
+    }
+
+    // çiğ noktası, standart meteorolojik "nem konforu" ölçeğine göre
+    // yorumlanıyor — nem yüzdesinden daha güvenilir bir konfor göstergesi,
+    // çünkü sıcaklığı da hesaba katıyor (magnus-tetens formülü zaten öyle)
+    var dewPointComfortLabel: String {
+        switch dewPoint {
+        case ..<10: return String(localized: "dew_point.dry", defaultValue: "Kuru")
+        case 10..<16: return String(localized: "dew_point.comfortable", defaultValue: "Rahat")
+        case 16..<19: return String(localized: "dew_point.slightly_humid", defaultValue: "Hafif nemli")
+        case 19..<23: return String(localized: "dew_point.humid", defaultValue: "Nemli")
+        default: return String(localized: "dew_point.oppressive", defaultValue: "Bunaltıcı")
+        }
+    }
+
+    // ayın o an aydınlanmış yüzeyinin yüzdesi — evre ismiyle (mesela "Küçülen
+    // Hilal") birlikte, "ne kadar" sorusuna da sayısal bir cevap veriyor
+    var moonIlluminationPercent: Int {
+        MoonPhase.illuminationPercent(for: sunset ?? Date())
+    }
 }
 
 // MARK: - günlük tahmin listesindeki tek bir gün

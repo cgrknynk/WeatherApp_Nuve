@@ -18,9 +18,13 @@ struct WeatherDetailBox: View {
     var iconColor: Color
     var title: LocalizedStringKey
     var value: String
+    // çıplak bir sayı ("%38" gibi) tek başına yorumsuz kalıyordu — bu kısa
+    // etiket ("Rahat"/"Kuru" gibi) sayının ne anlama geldiğini ekliyor.
+    // opsiyonel: her kutunun anlamlı bir yorumu olmayabilir
+    var note: String? = nil
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.weatherCardTitle)
@@ -34,11 +38,17 @@ struct WeatherDetailBox: View {
                 .font(.weatherCardValue)
                 .foregroundColor(.white)
 
+            if let note {
+                Text(note)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(iconColor.opacity(0.9))
+            }
+
             Spacer()
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 138)
+        .frame(height: weatherDetailBoxHeight)
         .weatherGlassCard(accentTint: iconColor)
         // voiceover bunu "nem, %65" gibi tek bir cümle olarak okusun diye,
         // yoksa ikon/etiket/değer ayrı ayrı, kopuk kopuk okunuyordu

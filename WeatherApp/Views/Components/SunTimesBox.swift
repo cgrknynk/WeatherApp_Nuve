@@ -21,7 +21,7 @@ struct SunTimesBox: View {
     let sunsetQualityLabel: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 9) {
             HStack(spacing: 6) {
                 Image(systemName: "sun.horizon")
                     .font(.weatherCardTitle)
@@ -47,11 +47,15 @@ struct SunTimesBox: View {
             .font(.weatherCaption.bold())
             .foregroundColor(.white)
 
-            HStack(spacing: 5) {
+            // lineLimit(2) + fixedSize: uzun bir etiket geldiğinde "..." ile
+            // kesilmek yerine gerektiğinde iki satıra düzgünce sarsın diye
+            HStack(alignment: .top, spacing: 5) {
                 Image(systemName: "wand.and.stars")
-                    .font(.caption2)
+                    .font(.system(size: 10, weight: .semibold))
                 Text("\(sunsetQualityScore)/10 — \(sunsetQualityLabel)")
-                    .font(.caption2.bold())
+                    .font(.system(size: 11, weight: .semibold))
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundColor(.orange.opacity(0.9))
 
@@ -59,7 +63,7 @@ struct SunTimesBox: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 138)
+        .frame(height: weatherDetailBoxHeight)
         .weatherGlassCard(accentTint: .orange)
         .accessibilityElement(children: .combine)
     }

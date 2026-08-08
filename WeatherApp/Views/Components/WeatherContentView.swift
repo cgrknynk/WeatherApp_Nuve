@@ -135,7 +135,7 @@ struct WeatherContentView: View {
                 // kural tabanlı "ne giymeli" önerisi. apple'ın kendi hava
                 // durumu uygulamasında olmayan, ikisini bir arada sunan
                 // özgün bir dokunuş
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 14) {
                     // rengi sadece ikona veriyoruz, yazı uygulamanın her
                     // yerdeki aynı normal beyaz metin rengiyle kalıyor —
                     // sadece ikon rengiyle ayrışması daha şık duruyor
@@ -143,16 +143,14 @@ struct WeatherContentView: View {
                         Label {
                             Text(nowcast)
                         } icon: {
-                            Image(systemName: "cloud.rain.fill")
-                                .foregroundColor(.cyan)
+                            iconBadge("cloud.rain.fill", tint: .cyan)
                         }
                     }
 
                     Label {
                         Text(weather.outfitSuggestion)
                     } icon: {
-                        Image(systemName: "tshirt.fill")
-                            .foregroundColor(.orange)
+                        iconBadge("tshirt.fill", tint: .orange)
                     }
                 }
                 .font(.weatherCaption.bold())
@@ -286,16 +284,16 @@ struct WeatherContentView: View {
                 // alt kısım, detay kutuları ızgarası
                 GlassEffectContainer {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted)
+                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel)
                         WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
 
-                        WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike))
-                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa")
+                        WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike), note: weather.feelsLikeDeltaLabel)
+                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa", note: weather.pressureLabel)
 
-                        WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km")
-                        WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted)
+                        WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km", note: weather.visibilityLabel)
+                        WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted, note: weather.cloudinessLabel)
 
-                        WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint))
+                        WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint), note: weather.dewPointComfortLabel)
                         SunTimesBox(
                             sunrise: weather.sunrise,
                             sunset: weather.sunset,
@@ -305,12 +303,7 @@ struct WeatherContentView: View {
 
                         // o geceki ay evresi, hiçbir yeni ağ isteği gerekmiyor,
                         // tamamen tarihten hesaplanıyor (bkz. Utilities/MoonPhase.swift)
-                        WeatherDetailBox(
-                            icon: weather.moonPhase.systemImageName,
-                            iconColor: .indigo,
-                            title: "AY EVRESİ",
-                            value: weather.moonPhase.localizedName
-                        )
+                        MoonPhaseBox(phase: weather.moonPhase, illuminationPercent: weather.moonIlluminationPercent)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -367,5 +360,21 @@ struct WeatherContentView: View {
         .font(.weatherSectionHeader)
         .foregroundColor(.white.opacity(0.6))
         .padding(.horizontal, 5)
+    }
+
+    // düz, tek renkli bir sf symbol yerine, apple'ın kendi sistem
+    // uygulamalarında (sağlık, hatırlatıcılar) gördüğümüz gibi ince bir
+    // halkalı, yumuşak dolgulu bir rozet içine oturtuyorum — aynı ikon,
+    // çok daha "tasarlanmış" hissettiriyor
+    private func iconBadge(_ systemName: String, tint: Color) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundStyle(tint)
+            .frame(width: 28, height: 28)
+            .background {
+                Circle()
+                    .fill(tint.opacity(0.18))
+                    .overlay(Circle().strokeBorder(tint.opacity(0.4), lineWidth: 1))
+            }
     }
 }

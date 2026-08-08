@@ -8,9 +8,6 @@
 import SwiftUI
 
 // MARK: - rüzgar kutusu, yön pusulası dahil
-// kutunun yüksekliği (aşağıda 138) bilerek diğer kutulardan biraz daha ferah,
-// hamle satırı eklenince eski sabit yükseklik yetmiyordu, metin kutunun
-// dışına taşıyordu
 struct WindDetailBox: View {
     let speedKmh: Double
     let degrees: Int?
@@ -18,7 +15,7 @@ struct WindDetailBox: View {
     let unit: WindSpeedUnit
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
                 Image(systemName: "wind")
                     .font(.weatherCardTitle)
@@ -42,20 +39,28 @@ struct WindDetailBox: View {
             }
 
             // api bazen rüzgar hamlesini de veriyor, önceden hiç okumuyordum.
-            // sadece anlamlı bir değer varsa gösteriyorum. "hamle" tek başına
-            // ne olduğu anlaşılmayan bir meteoroloji terimi olduğu için, ne
-            // olduğunu açıklayan bir kelime daha ekledik ("ani rüzgar")
+            // "rüzgar" kelimesini burada tekrar etmiyoruz, kutunun kendi
+            // başlığı zaten "RÜZGAR" — küçük, ince bir rozet içindeki ok
+            // ikonu da "ani/keskin" hissini görsel olarak destekliyor.
+            // lineLimit(2) + fixedSize: metin sıkışınca "..." ile kesilmek
+            // yerine gerektiğinde iki satıra düzgünce sarsın diye
             if let gustKmh, gustKmh > speedKmh {
-                Text(String(format: String(localized: "wind.gust_format", defaultValue: "Ani rüzgar hamlesi: %@"), unit.format(gustKmh)))
-                    .font(.weatherCaption)
-                    .foregroundColor(.white.opacity(0.6))
+                HStack(spacing: 5) {
+                    Image(systemName: "arrow.up.forward")
+                        .font(.system(size: 9, weight: .bold))
+                    Text(String(format: String(localized: "wind.gust_format", defaultValue: "Ani hamle: %@"), unit.format(gustKmh)))
+                        .font(.system(size: 11, weight: .medium))
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .foregroundColor(.mint.opacity(0.9))
             }
 
             Spacer()
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 138)
+        .frame(height: weatherDetailBoxHeight)
         .weatherGlassCard(accentTint: .mint)
         .accessibilityElement(children: .combine)
     }
