@@ -33,8 +33,15 @@ struct HomeView: View {
         NavigationStack {
             ZStack {
                 // MARK: - arka plandaki hareketli gradyan
-                AmbientBackgroundView(colors: WeatherPalette.colors(conditionCode: 800, isNight: WeatherPalette.isCurrentlyNight))
-                    .ignoresSafeArea()
+                // özgünlük turu: eskiden burası hep sabit "açık hava" (800)
+                // rengindeydi, konumun gerçek havası ne olursa olsun. artık
+                // mevcut konumun GERÇEK anlık koduna göre boyanıyor (veri
+                // henüz gelmediyse aynı eski sabit değere düşüyor)
+                AmbientBackgroundView(colors: WeatherPalette.colors(
+                    conditionCode: currentLocationWeather?.conditionCode ?? 800,
+                    isNight: currentLocationWeather?.isNight ?? WeatherPalette.isCurrentlyNight
+                ))
+                .ignoresSafeArea()
 
                 // MARK: - asıl liste
                 List {

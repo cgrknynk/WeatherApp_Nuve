@@ -22,7 +22,9 @@ struct FavoriteCityRow: View {
                 name: city,
                 temperature: snapshot.temperature,
                 systemIconName: snapshot.systemIconName,
-                unit: unit
+                unit: unit,
+                timezoneOffsetSeconds: snapshot.timezoneOffsetSeconds,
+                conditionCode: snapshot.conditionCode
             )
         } else {
             HStack {
