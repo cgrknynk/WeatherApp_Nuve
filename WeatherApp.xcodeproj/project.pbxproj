@@ -254,6 +254,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SupplementalInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Nuve;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Size en yakın şehrin hava durumunu gösterebilmek için konum izninize ihtiyacımız var.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -287,6 +288,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SupplementalInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Nuve;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Size en yakın şehrin hava durumunu gösterebilmek için konum izninize ihtiyacımız var.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

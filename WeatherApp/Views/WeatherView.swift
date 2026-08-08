@@ -1,5 +1,6 @@
 import SwiftUI
 import Charts
+import UIKit
 
 // MARK: - şehir detay ekranı
 // tek bir konumun hava durumunu gösteren ekran, arama sonucu, mevcut konum ve
@@ -25,6 +26,11 @@ struct WeatherView: View {
     // kullanıcı alt şeritten başka bir favoriye dokununca değişiyor
     @State private var activeLocation: WeatherLocation
     @State private var activeName: String
+
+    // paylaşım için önceden çizilmiş görsel. her hava güncellemesinde
+    // yeniden hesaplanıyor (bkz. .onChange), böylece paylaş düğmesine
+    // basıldığı an görsel zaten hazır oluyor
+    @State private var shareImage: Image?
 
     init(location: WeatherLocation, zoomNamespace: Namespace.ID, zoomSourceID: String? = nil, favorites: [FavoriteCity] = []) {
         self.zoomNamespace = zoomNamespace
@@ -86,6 +92,10 @@ struct WeatherView: View {
             activeLocation = favorite.location
             viewModel.fetchWeather(for: favorite.location)
         }
+        .onChange(of: currentWeather) { _, newWeather in
+            guard let newWeather else { return }
+            shareImage = renderShareImage(for: newWeather)
+        }
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -106,13 +116,23 @@ struct WeatherView: View {
 
             if let weather = currentWeather {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ShareLink(item: shareText(for: weather))
+                    // görsel kart henüz hazır değilse (ekrana yeni gelindiği
+                    // an gibi çok kısa bir pencerede), eski düz metni yedek
+                    // olarak kullanıyoruz — düğme hiçbir zaman boş kalmıyor
+                    if let shareImage {
+                        ShareLink(
+                            item: shareImage,
+                            preview: SharePreview(weather.name, image: shareImage)
+                        )
+                    } else {
+                        ShareLink(item: shareText(for: weather))
+                    }
                 }
             }
         }
     }
 
-    // MARK: - paylaşım metni
+    // MARK: - paylaşım metni (görsel kart hazır olana kadarki yedek)
     private func shareText(for weather: CityWeather) -> String {
         String(
             format: String(localized: "share.summary_format", defaultValue: "%@: %@, %@"),
@@ -120,6 +140,22 @@ struct WeatherView: View {
             viewModel.preferredUnit.format(weather.temperature),
             weather.conditionDescription.capitalized
         )
+    }
+
+    // MARK: - paylaşım kartını görsele çevirme
+    // ImageRenderer, herhangi bir SwiftUI View'ı bir bitmap'e çeviren
+    // sistem aracı — burada ShareableWeatherCard'ı, ekranda hiç
+    // görünmeden, doğrudan paylaşılabilir bir resme dönüştürüyoruz
+    @MainActor
+    private func renderShareImage(for weather: CityWeather) -> Image? {
+        let renderer = ImageRenderer(content: ShareableWeatherCard(weather: weather, unit: viewModel.preferredUnit))
+        // sabit bir ölçek veriyorum (3x, en yüksek yaygın ekran yoğunluğu) —
+        // cihazın kendi ekranını sormanın (UIScreen.main) artık kullanımdan
+        // kaldırılmış olması yüzünden, paylaşılan görsel her cihazda hep
+        // aynı, keskin çözünürlükte çıkıyor
+        renderer.scale = 3
+        guard let uiImage = renderer.uiImage else { return nil }
+        return Image(uiImage: uiImage)
     }
 }
 

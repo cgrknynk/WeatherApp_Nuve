@@ -239,6 +239,15 @@ struct HomeView: View {
                     for: .coordinate(lat: coordinate.latitude, lon: coordinate.longitude, displayName: locationManager.displayLocationName ?? "")
                 )
             }
+            // uygulama ikonu, kullanıcının BULUNDUĞU yerin (herhangi bir
+            // arama sonucunun değil) o anki havasına göre güncelleniyor —
+            // tek bir yerden tetiklendiği için mevcut konum kaç farklı
+            // noktadan tazelenirse tazelensin (yenile, uygulama açılışı,
+            // ön plana dönüş) ikon hep senkron kalıyor
+            .onChange(of: currentLocationWeather) { _, newWeather in
+                guard let newWeather else { return }
+                AppIconManager.update(for: newWeather.conditionCode)
+            }
         }
     }
 

@@ -131,6 +131,36 @@ struct WeatherContentView: View {
 
                 Spacer().frame(height: 30)
 
+                // hızlı öneriler kartı: dakika çözünürlüklü yağış tahmini +
+                // kural tabanlı "ne giymeli" önerisi. apple'ın kendi hava
+                // durumu uygulamasında olmayan, ikisini bir arada sunan
+                // özgün bir dokunuş
+                VStack(alignment: .leading, spacing: 10) {
+                    if let nowcast = weather.precipitationNowcast {
+                        Label {
+                            Text(nowcast)
+                        } icon: {
+                            Image(systemName: "cloud.rain.fill")
+                        }
+                        .foregroundColor(.cyan)
+                    }
+
+                    Label {
+                        Text(weather.outfitSuggestion)
+                    } icon: {
+                        Image(systemName: "tshirt.fill")
+                    }
+                    .foregroundColor(.orange)
+                }
+                .font(.weatherCaption.bold())
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .weatherGlassCard()
+                .padding(.horizontal, 20)
+
+                Spacer().frame(height: 20)
+
                 // orta kısım, 24 saatlik grafik
                 if !hourly.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {

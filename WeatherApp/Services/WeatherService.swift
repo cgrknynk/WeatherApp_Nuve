@@ -65,6 +65,16 @@ private nonisolated struct OpenMeteoResponse: Codable {
         let sunrise: [String]
         let sunset: [String]
     }
+
+    // "yağış birazdan başlıyor" uyarısı için 15 dakikalık çözünürlükte veri.
+    // opsiyonel çünkü çok nadir istisnai bir bölgede open-meteo bunu hiç
+    // vermeyebilir, o durumda uyarıyı sessizce hiç göstermiyoruz
+    let minutely_15: Minutely15?
+
+    struct Minutely15: Codable {
+        let time: [String]
+        let precipitation: [Double]
+    }
 }
 
 // MARK: - hava kalitesi cevabı
@@ -180,6 +190,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,pressure_msl,visibility,wind_speed_10m,wind_direction_10m,wind_gusts_10m"
             + "&hourly=temperature_2m,precipitation_probability,weather_code"
             + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset"
+            + "&minutely_15=precipitation&forecast_minutely_15=8"
             + "&timezone=auto&wind_speed_unit=kmh&forecast_days=7&forecast_hours=24"
 
         guard let url = URL(string: urlString) else { throw WeatherError.invalidResponse }
@@ -220,7 +231,8 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             tempMax: decoded.daily.temperature_2m_max.first ?? decoded.current.temperature_2m,
             lat: identity.lat,
             lon: identity.lon,
-            timezoneOffsetSeconds: decoded.utc_offset_seconds
+            timezoneOffsetSeconds: decoded.utc_offset_seconds,
+            precipitationNowcast: Self.nowcastMessage(from: decoded.minutely_15)
         )
 
         // forecast_hours=24 dediğim için open-meteo şu anki saatten itibaren
@@ -284,6 +296,35 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
     // tarihleri okurken telefonun bölge ayarından etkilenmek istemiyorum.
     // hem saatlik hem günlük zaman metinleri aynı mantıkla çözülüyor, tek
     // farkları format string'i, o yüzden tek fonksiyon yeterli
+    // MARK: - "yağış birazdan başlıyor" mesajını üretme
+    // 15 dakikalık dilimlerdeki yağış miktarına bakıp, önümüzdeki 2 saat
+    // içinde (8 dilim) yağışın ne zaman başlayacağını/duracağını tahmin
+    // ediyorum. eşik değeri (0.1mm) open-meteo'nun kendi belgelerinde
+    // "hissedilir yağış" için önerdiği kabaca sınır
+    private static func nowcastMessage(from minutely: OpenMeteoResponse.Minutely15?) -> String? {
+        guard let precipitation = minutely?.precipitation, !precipitation.isEmpty else { return nil }
+        let threshold = 0.1
+
+        if precipitation[0] > threshold {
+            if let stopIndex = precipitation.firstIndex(where: { $0 <= threshold }) {
+                return String(
+                    format: String(localized: "nowcast.stopping_format", defaultValue: "Yağış yaklaşık %d dakika içinde dinebilir"),
+                    stopIndex * 15
+                )
+            }
+            return String(localized: "nowcast.ongoing", defaultValue: "Şu anda yağış var")
+        }
+
+        if let startIndex = precipitation.firstIndex(where: { $0 > threshold }) {
+            return String(
+                format: String(localized: "nowcast.starting_format", defaultValue: "Yağış yaklaşık %d dakika içinde başlayabilir"),
+                startIndex * 15
+            )
+        }
+
+        return String(localized: "nowcast.clear", defaultValue: "Önümüzdeki 2 saat içinde yağış beklenmiyor")
+    }
+
     private static func formatter(dateFormat: String, timeZone: TimeZone) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = dateFormat

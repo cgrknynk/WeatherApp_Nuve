@@ -48,6 +48,11 @@ struct CityWeather: Codable, Equatable {
     // yoksa yurt dışı bir şehirde günler kayıp yanlış görünüyordu
     let timezoneOffsetSeconds: Int
 
+    // "yağış 12 dakika içinde başlıyor" gibi, dakika çözünürlüklü bir tahmin.
+    // hazır gelmiyor, WeatherService bunu open-meteo'nun 15 dakikalık verisinden
+    // kendisi hesaplayıp burada hazır bir metin olarak bırakıyor (bkz. o dosya)
+    let precipitationNowcast: String?
+
     // şu an gece mi gündüz mü, gündoğumu/günbatımı saatlerine bakarak anlıyorum.
     // arka plan rengi ve ikon (güneş mi ay mı) buna göre değişiyor
     var isNight: Bool {
@@ -116,6 +121,40 @@ struct CityWeather: Codable, Equatable {
     // arasındaki "gece" neredeyse hep günbatımından sonraki geceyi işaret eder)
     var moonPhase: MoonPhase {
         MoonPhase.phase(for: sunset ?? Date())
+    }
+
+    // "ne giymeli" önerisi: hissedilen sıcaklık, yağış ve rüzgara bakan kural
+    // tabanlı kısa bir cümle. ekstra veri gerekmiyor, elimizdekiyle hesaplanıyor
+    var outfitSuggestion: String {
+        var parts: [String] = []
+
+        switch feelsLike {
+        case ..<0:
+            parts.append(String(localized: "outfit.freezing", defaultValue: "kalın mont, bere ve eldiven şart"))
+        case 0..<10:
+            parts.append(String(localized: "outfit.cold", defaultValue: "kalın bir mont iyi olur"))
+        case 10..<17:
+            parts.append(String(localized: "outfit.mild", defaultValue: "ince bir ceket yeterli"))
+        case 28...:
+            parts.append(String(localized: "outfit.hot", defaultValue: "hafif ve ferah giyin"))
+        default:
+            break
+        }
+
+        if (300...321).contains(conditionCode) || (500...622).contains(conditionCode) {
+            parts.append(String(localized: "outfit.umbrella", defaultValue: "şemsiyeni yanına al"))
+        }
+
+        if windSpeed >= 35 {
+            parts.append(String(localized: "outfit.wind", defaultValue: "rüzgar kırıcı bir şey giy"))
+        }
+
+        guard !parts.isEmpty else {
+            return String(localized: "outfit.pleasant", defaultValue: "Bugün özel bir hazırlığa gerek yok")
+        }
+
+        let sentence = parts.joined(separator: ", ")
+        return sentence.prefix(1).capitalized + sentence.dropFirst()
     }
 }
 
