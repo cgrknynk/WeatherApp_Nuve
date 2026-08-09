@@ -45,7 +45,10 @@ private nonisolated struct OpenMeteoResponse: Codable {
         let pressure_msl: Double
         let visibility: Double
         let wind_speed_10m: Double
-        let wind_direction_10m: Int
+        // rüzgar hızı sıfırken (dingin hava) yönün bir anlamı kalmıyor —
+        // open-meteo bu durumda alanı hiç göndermeyebiliyor, o yüzden
+        // opsiyonel: CityWeather.windDeg zaten Int? kabul ediyordu
+        let wind_direction_10m: Int?
         let wind_gusts_10m: Double?
     }
 
