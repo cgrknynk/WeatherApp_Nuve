@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-// MARK: - favori şehir satırı
-// veri henüz gelmediyse (uygulama yeni açıldı, hâlâ yükleniyor) sadece isim
-// ve dönen bir çark gösteriyorum. veri geldiyse aynı görünümü tekrar yazmak
-// yerine paylaşılan CityWeatherRow bileşenini kullanıyorum
 struct FavoriteCityRow: View {
     let favorite: FavoriteCity
     let snapshot: CityWeather?

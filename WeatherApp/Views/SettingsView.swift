@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// MARK: - ayarlar ekranı
 struct SettingsView: View {
     @EnvironmentObject var viewModel: WeatherViewModel
     @Environment(\.dismiss) private var dismiss
@@ -15,8 +14,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // hava durumu renklerini değil, kendine ait nötr bir palet
-                // kullanıyor, hem okunabilirlik hem tutarlı bir görünüm için
                 AmbientBackgroundView(colors: WeatherPalette.chromeColors)
                     .ignoresSafeArea()
 

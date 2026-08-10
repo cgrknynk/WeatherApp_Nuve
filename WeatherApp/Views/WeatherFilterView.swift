@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-// MARK: - favori listesini filtreleme sayfası
-// hava durumu türüne ve sıcaklık aralığına göre favori şehirleri filtrelemeyi
-// sağlıyor. sıcaklık hep celsius saklanıyor, kaydırıcılar kullanıcının
-// tercih ettiği birime göre anlık çevriliyor. "uygula"ya basmadan hiçbir şey
-// değişmiyor, bu ekran sadece bir taslak düzenliyor, sonuçlar ayrı bir
-// ekranda gösteriliyor
 struct WeatherFilterView: View {
     @Binding var filter: WeatherFilter
     let unit: TemperatureUnit
@@ -118,7 +112,7 @@ struct WeatherFilterView: View {
                                 .font(.weatherRowTitle)
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.glassProminent)
+                        .weatherProminentButtonStyle()
                         .controlSize(.large)
                         .hiddenListRow()
                         .padding(.vertical, 6)
@@ -149,11 +143,6 @@ struct WeatherFilterView: View {
     }
 }
 
-// MARK: - hava durumu seçim çipi
-// eskiden bir fonksiyondu, ayrı bir View yaptım ki her çipin seçili olup
-// olmadığı kesin olarak kendi isSelected değerinden gelsin, birbirine
-// karışma ihtimali kalmasın. seçiliyken dolgun beyaz arka plan + siyah yazı
-// + onay işareti kullanıyorum, eskiden aradaki fark çok az belliydi
 private struct ConditionChip: View {
     let category: WeatherConditionCategory
     let isSelected: Bool
@@ -180,8 +169,6 @@ private struct ConditionChip: View {
         .overlay(
             Capsule().strokeBorder(.white.opacity(isSelected ? 0 : 0.18), lineWidth: 1)
         )
-        // çipin tüm alanı (yazının etrafındaki boşluk dahil) dokunulabilir
-        // olsun diye, GlassCard'daki aynı düzeltmenin notuna bak
         .contentShape(Capsule())
     }
 }

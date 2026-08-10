@@ -7,22 +7,17 @@
 
 import SwiftUI
 
-// MARK: - günlük tahmin satırı
 struct DailyForecastRow: View {
     let day: DailyForecast
     let calendar: Calendar
     let unit: TemperatureUnit
 
-    // yağış olasılığı satırının, o günün havasına göre kar mı yağmur mu
-    // olduğunu gösteren ayrı bir ikon/renk kullanması için. 600-622 aralığı
-    // WMOWeatherCode.swift'teki kar kodları (bkz. o dosya)
     private var isSnowyDay: Bool {
         (600...622).contains(day.conditionCode)
     }
 
     var body: some View {
         HStack {
-            // gün ismi, sistem diline göre değişiyor (bugün, salı gibi)
             Text(RelativeDayFormatter.label(for: day.date, calendar: calendar))
                 .font(.weatherRowSubtitle)
                 .foregroundColor(.white)

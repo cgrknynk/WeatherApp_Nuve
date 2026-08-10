@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-// MARK: - yükleniyor iskeleti
-// düz bir dönen çark yerine, gelecek ekranın hatlarını andıran ve üzerinde
-// yumuşak bir ışık dalgası gezen bir yer tutucu gösteriyorum
+// gelecek ekranın hatlarını andıran, üzerinde ışık dalgası gezen yer tutucu
 struct WeatherLoadingSkeleton: View {
     var body: some View {
         VStack(spacing: 20) {

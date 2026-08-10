@@ -7,12 +7,7 @@
 
 import SwiftUI
 
-// MARK: - üst çubuktaki logo
-// ana ekranın en üstünde düz "nuve" yazısı çok sıkıcı duruyordu. bunun yerine
-// kendi çizdiğim küçük bir simgeyi (uygulama ikonuyla aynı motif, bir yörünge
-// halkasına sarılı küre) ince harfli "nuve" yazısıyla yan yana koydum. sistemin
-// kalın varsayılan başlık fontu yerine kendi ince fontumu kullanıyorum, daha
-// şık duruyor
+// üst çubuktaki logo + "Nuve" yazısı
 struct BrandHeader: View {
     var body: some View {
         HStack(spacing: 7) {

@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-// MARK: - yükleniyor/başarılı/hata durumlarının ortak iskeleti
-// ekranın üç durumunu (yükleniyor, başarılı, hata) WeatherView'ın kendi
-// dosyasından ayırıp buraya topladım, böylece o dosya sadece kendi düzenine
-// (üst çubuk, favori şeridi) odaklanabiliyor. successContent closure'ı
-// başarı durumundaki veriyi alıp WeatherContentView'ı üretiyor
+// yükleniyor/başarılı/hata durumlarının ortak iskeleti
 struct WeatherStateScaffold<SuccessContent: View>: View {
     let state: WeatherViewState
     let onRetry: () -> Void
@@ -40,7 +36,7 @@ struct WeatherStateScaffold<SuccessContent: View>: View {
                 Button("Tekrar Dene") {
                     onRetry()
                 }
-                .buttonStyle(.glassProminent)
+                .weatherProminentButtonStyle()
             }
             .padding(.horizontal, 20)
             Spacer()

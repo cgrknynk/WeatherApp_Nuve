@@ -11,16 +11,9 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showFilter = false
     @State private var filter = WeatherFilter()
-    // favoriyi sağa kaydırınca açılan takma isim/renk düzenleme sayfası —
-    // sheet(item:) kullanıyorum çünkü FavoriteCity zaten Identifiable, hangi
-    // favorinin düzenlendiğini ayrı bir Bool yerine bu tek değişken tutuyor
     @State private var editingFavorite: FavoriteCity?
 
-    // arama kutusundaki otomatik tamamlama servisi
     @StateObject private var searchService = LocationSearchService()
-
-    // liste satırından detay ekranına geçerken oynayan yakınlaşma animasyonu
-    // için gereken paylaşılan isim alanı
     @Namespace private var heroNamespace
 
     private var greeting: String {
@@ -36,36 +29,15 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: - arka plandaki hareketli gradyan
-                // özgünlük turu: eskiden burası hep sabit "açık hava" (800)
-                // rengindeydi, konumun gerçek havası ne olursa olsun. artık
-                // mevcut konumun GERÇEK anlık koduna göre boyanıyor (veri
-                // henüz gelmediyse aynı eski sabit değere düşüyor)
-                //
-                // yaşanan bir hata: gece/gündüz burada eskiden mevcut konumun
-                // KENDİ saatine göre belirleniyordu (currentLocationWeather?.isNight).
-                // konum uzak bir saat diliminde (mesela gündüz olan bir yerde)
-                // ise, telefonda saat gece yarısına yakın olup üstteki "İyi
-                // Geceler" selamlaması gösterilirken, arka plan yine de PARLAK
-                // gündüz renklerine boyanıyordu — selamlama ile arka planın
-                // birbirine ters düşmesi kullanıcıya çelişki gibi göründü. bu
-                // ekran kullanıcının KENDİ günü hakkında bir selamlama (bkz.
-                // yukarıdaki "greeting"), o yüzden gece/gündüz de HER ZAMAN
-                // telefonun kendi saatine göre (isCurrentlyNight) belirleniyor;
-                // sadece renk TONU (açık/kapalı/yağmurlu gibi) mevcut konumun
-                // gerçek koduna göre kalıyor
                 AmbientBackgroundView(colors: WeatherPalette.colors(
                     conditionCode: currentLocationWeather?.conditionCode ?? 800,
                     isNight: WeatherPalette.isCurrentlyNight
                 ))
                 .ignoresSafeArea()
 
-                // MARK: - asıl liste
                 List {
-                    // arama kutusu boşsa normal ana ekranı göster
                     if searchService.searchQuery.isEmpty {
 
-                        // saate göre değişen selamlama yazısı
                         Section {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(greeting)
@@ -79,7 +51,6 @@ struct HomeView: View {
                             .hiddenListRow(insets: EdgeInsets(top: 12, leading: 20, bottom: 4, trailing: 20))
                         }
 
-                        // mevcut konum kartı, dokununca oranın hava durumuna gidiyor
                         if locationManager.authorizationStatus != .denied {
                             Section {
                                 locationWeatherCard
@@ -98,7 +69,6 @@ struct HomeView: View {
                             }
                         }
 
-                        // favori şehirler listesi
                         Section {
                             if viewModel.savedCities.isEmpty {
                                 GlassWarningView(
@@ -111,9 +81,6 @@ struct HomeView: View {
                                 .hiddenListRow(insets: EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0))
                             } else {
                                 ForEach(viewModel.savedCities) { favorite in
-                                    // favoriye dokununca arama sonucuyla aynı, tekil şehir ekranı
-                                    // açılıyor. diğer favorilere geçiş artık kaydırarak değil,
-                                    // o ekranın altındaki şeritten dokunarak oluyor (FavoriteSwitcherStrip'e bak)
                                     NavigationLink(destination: WeatherView(location: favorite.location, zoomNamespace: heroNamespace, zoomSourceID: favorite.name, favorites: viewModel.savedCities)) {
                                         FavoriteCityRow(
                                             favorite: favorite,
@@ -132,8 +99,6 @@ struct HomeView: View {
                                             Label("Sil", systemImage: "trash")
                                         }
                                     }
-                                    // sağa kaydırma: takma isim ve kart rengi düzenleme.
-                                    // silmekten bağımsız, karşı kenarda (leading) yaşıyor
                                     .swipeActions(edge: .leading) {
                                         Button {
                                             editingFavorite = favorite
@@ -142,9 +107,6 @@ struct HomeView: View {
                                         }
                                         .tint(.indigo)
                                     }
-                                    // cam efektini satırın arka planına değil kendi içeriğine
-                                    // uyguluyorum, yoksa list'in satır kutusu ile cam köşeleri
-                                    // tam örtüşmüyor ve kenarlar kaymış görünüyordu
                                     .hiddenListRow(insets: EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                                 }
                                 .onMove(perform: moveFavorite)
@@ -157,7 +119,6 @@ struct HomeView: View {
                         }
 
                     } else if searchService.searchResults.isEmpty {
-                        // arama yapıldı ama hiç sonuç çıkmadı
                         Section {
                             GlassWarningView(
                                 iconName: "magnifyingglass",
@@ -172,7 +133,6 @@ struct HomeView: View {
                             .hiddenListRow(insets: EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0))
                         }
                     } else {
-                        // arama sonuçlarının listesi
                         Section {
                             ForEach(searchService.searchResults, id: \.self) { result in
                                 Button {
@@ -204,14 +164,8 @@ struct HomeView: View {
                 }
                 .sensoryFeedback(.selection, trigger: viewModel.savedCities.count)
             }
-            // bu başlık ekranda görünmüyor artık (aşağıdaki özel logo onun yerini
-            // aldı) ama voiceover bunu okuyor ve geri butonunun etiketi için
-            // lazım, o yüzden boş bırakmıyorum
-            .navigationTitle("Nuve")
+            .navigationTitle("Nuve") // görünmüyor ama voiceover/geri buton etiketi için lazım
             .navigationBarTitleDisplayMode(.inline)
-            // gezinme çubuğunu açıkça koyu moda sabitliyorum, yoksa sistem
-            // ilk karede kendi varsayılan rengini gösterip hemen ardından
-            // koyu temaya geçiyordu, bu da küçük bir titreme gibi görünüyordu
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -232,10 +186,6 @@ struct HomeView: View {
                     }
                 }
             }
-            // bir sonuca dokununca arama metnini artık silmiyorum. eskiden
-            // siliyordum ama o zaman detay ekranından geri dönünce kullanıcı
-            // arama sonuçlarını değil boş ana ekranı görüyordu. metni tutunca
-            // geri dönüş tam olarak bırakılan yere oluyor
             .searchable(text: $searchService.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: "Şehir ara (Örn: İstanbul)")
             .onSubmit(of: .search) {
                 let query = searchService.searchQuery
@@ -257,18 +207,11 @@ struct HomeView: View {
             }
             .onAppear {
                 locationManager.requestLocation()
-                // favori satırları, kimse dokunmadan da güncel sıcaklığı
-                // göstersin diye uygulama her açıldığında sessizce tazeliyorum
                 viewModel.refreshFavoriteSnapshots()
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 if newPhase == .active {
-                    // kullanıcı arka plandayken ayarlar'dan konum iznini değiştirmiş
-                    // olabilir, burada durumu elle tekrar okuyup gerçekten
-                    // değiştiyse harekete geçiyorum
                     locationManager.refreshAuthorizationStatusIfNeeded()
-                    // uygulama arka planda uzun süre kalmışsa sıcaklıklar
-                    // bayatlamış olabilir, ön plana her dönüşte de tazeliyorum
                     viewModel.refreshFavoriteSnapshots()
                 }
             }
@@ -278,11 +221,6 @@ struct HomeView: View {
                     for: .coordinate(lat: coordinate.latitude, lon: coordinate.longitude, displayName: locationManager.displayLocationName ?? "")
                 )
             }
-            // uygulama ikonu, kullanıcının BULUNDUĞU yerin (herhangi bir
-            // arama sonucunun değil) o anki havasına göre güncelleniyor —
-            // tek bir yerden tetiklendiği için mevcut konum kaç farklı
-            // noktadan tazelenirse tazelensin (yenile, uygulama açılışı,
-            // ön plana dönüş) ikon hep senkron kalıyor
             .onChange(of: currentLocationWeather) { _, newWeather in
                 guard let newWeather else { return }
                 AppIconManager.update(for: newWeather.conditionCode)
@@ -290,13 +228,10 @@ struct HomeView: View {
         }
     }
 
-    // arama önerisine dokununca sadece başlık metniyle sormak yerine mapkit'in
-    // sonucunu gerçek bir koordinata çeviriyorum, isimle arama bazen tutmuyordu
     private func selectSearchResult(_ result: MKLocalSearchCompletion) async {
         searchedLocation = await searchService.resolve(result)
     }
 
-    // MARK: - dokunulabilir mevcut konum kartı
     private var locationWeatherCard: some View {
         NavigationLink(destination: Group {
             if let coordinate = locationManager.location {
@@ -365,8 +300,6 @@ struct HomeView: View {
         .buttonStyle(PlainButtonStyle())
     }
 
-    // favori kartlarını sürükleyip bırakarak (kaydırmadan tamamen bağımsız,
-    // her satırın kendi standart sürükleme tutamacı üzerinden) yeniden sıralama
     private func moveFavorite(from source: IndexSet, to destination: Int) {
         viewModel.savedCities.move(fromOffsets: source, toOffset: destination)
     }

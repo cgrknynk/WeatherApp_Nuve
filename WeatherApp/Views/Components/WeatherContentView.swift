@@ -8,11 +8,7 @@
 import SwiftUI
 import Charts
 
-// MARK: - şehir detayının asıl içeriği, kaydırılabilir kısım
-// bunu WeatherView'ın gövdesinden bilerek ayrı bir dosyada tutuyorum: bu View
-// tamamen durumsuz, hiçbir ortam nesnesine bağlı değil, sadece kendisine
-// verilen veriyi gösteriyor. böylece xcode önizlemesinde tek başına, örnek
-// veriyle kolayca test edilebiliyor ve WeatherView'ın kendisi çok daha kısa kalıyor
+// şehir detayının asıl (kaydırılabilir) içeriği, durumsuz ve tek başına önizlenebilir
 struct WeatherContentView: View {
     let weather: CityWeather
     let hourly: [HourlyForecast]
@@ -23,13 +19,8 @@ struct WeatherContentView: View {
     let lastUpdated: Date?
     let onRefresh: () -> Void
 
-    // ilginç bilgi kartının açık olup olmadığı — bu view'ın dışına hiçbir
-    // etkisi yok, tamamen kendi içinde başlayıp kendi içinde bitiyor, o
-    // yüzden "durumsuz" ilkesini bozmuyor
     @State private var showCityFact = false
 
-    // şehrin kendi saat dilimi. hem günlük tahmindeki "bugün/yarın" hesabı hem
-    // de aşağıdaki canlı saat gösterimi bunu kullanıyor, telefonun saatini değil
     private var cityTimeZone: TimeZone {
         TimeZone(secondsFromGMT: weather.timezoneOffsetSeconds) ?? .current
     }
@@ -40,8 +31,6 @@ struct WeatherContentView: View {
         return calendar
     }
 
-    // verilen anı, şehrin kendi saat dilimine göre "14:32" gibi kısa bir saat
-    // yazısına çeviriyor
     private func localTimeText(_ date: Date) -> String {
         date.formatted(Date.FormatStyle(date: .omitted, time: .shortened, timeZone: cityTimeZone))
     }
@@ -50,25 +39,19 @@ struct WeatherContentView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 4) {
 
-                // üst kısım, ana bilgiler
                 VStack(spacing: 6) {
                     Text(weather.name)
                         .font(.weatherCityName)
                         .foregroundColor(.white)
                         .padding(.top, 40)
 
-                    // antarktika gibi resmi bir ülkesi olmayan yerlerde bu boş
-                    // geliyor, boşken hiç göstermiyoruz ki altında anlamsız bir
-                    // boşluk kalmasın
                     if !weather.localizedCountryName.isEmpty {
                         Text(weather.localizedCountryName)
                             .font(.weatherCaption)
                             .foregroundColor(.white.opacity(0.6))
                     }
 
-                    // şehrin o anki yerel saati, dakikada bir kendini tazeliyor.
-                    // küçük bir cam hap içinde, diğer küçük yazılardan bilerek
-                    // daha belirgin — hızlıca göz atınca hemen okunsun diye
+                    // şehrin o anki yerel saati, dakikada bir kendini tazeliyor
                     TimelineView(.everyMinute) { timeline in
                         HStack(spacing: 5) {
                             Image(systemName: "clock.fill")
@@ -101,8 +84,6 @@ struct WeatherContentView: View {
                     .foregroundColor(.white)
                     .opacity(0.9)
 
-                    // günün ölçülen en düşük/en yüksek sıcaklığı, api zaten
-                    // veriyordu ama önceden hiç ekranda göstermiyordum
                     HStack(spacing: 6) {
                         Text(String(format: String(localized: "weather.high_format", defaultValue: "Y:%@"), unit.format(weather.tempMax)))
                         Text(String(format: String(localized: "weather.low_format", defaultValue: "D:%@"), unit.format(weather.tempMin)))
@@ -111,8 +92,6 @@ struct WeatherContentView: View {
                     .foregroundColor(.white.opacity(0.75))
                     .padding(.top, 2)
 
-                    // hissedilen sıcaklık gerçek sıcaklıktan belirgin farklıysa
-                    // küçük bir not ekliyorum, apple'ın kendi uygulamasında da benzeri var
                     if abs(weather.feelsLike - weather.temperature) >= 2 {
                         Text(feelsLikeNote(for: weather))
                             .font(.weatherCaption)
@@ -131,14 +110,7 @@ struct WeatherContentView: View {
 
                 Spacer().frame(height: 30)
 
-                // hızlı öneriler kartı: dakika çözünürlüklü yağış tahmini +
-                // kural tabanlı "ne giymeli" önerisi. apple'ın kendi hava
-                // durumu uygulamasında olmayan, ikisini bir arada sunan
-                // özgün bir dokunuş
                 VStack(alignment: .leading, spacing: 14) {
-                    // rengi sadece ikona veriyoruz, yazı uygulamanın her
-                    // yerdeki aynı normal beyaz metin rengiyle kalıyor —
-                    // sadece ikon rengiyle ayrışması daha şık duruyor
                     if let nowcast = weather.precipitationNowcast {
                         Label {
                             Text(nowcast)
@@ -162,20 +134,13 @@ struct WeatherContentView: View {
 
                 Spacer().frame(height: 20)
 
-                // orta kısım, 24 saatlik grafik
                 if !hourly.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {
                         sectionHeader("24 SAATLİK TAHMİN", icon: "clock")
 
-                        // şu an çizgisi dakikada bir kendini tazeliyor ki grafikteki
-                        // konumu gerçek zamana göre kayarak ilerlesin
                         TimelineView(.everyMinute) { timeline in
                             Chart {
-                                // open-meteo artık gerçek saatlik veri veriyor, 24
-                                // noktanın hepsine etiket koyarsam üst üste binip
-                                // karman çorman görünüyor. o yüzden çizgi hâlâ tüm
-                                // 24 saati kullanıyor ama nokta ve etiket sadece
-                                // 3 saatte bir gösteriliyor
+                                // etiket karmaşası olmasın diye nokta/etiket sadece 3 saatte bir
                                 ForEach(Array(hourly.enumerated()), id: \.offset) { index, forecast in
                                     AreaMark(
                                         x: .value("Saat", forecast.time),
@@ -206,9 +171,7 @@ struct WeatherContentView: View {
                                     }
                                 }
 
-                                // grafikte "şu an" neredeyiz onu gösteren, kesik çizgili ince bir işaret.
-                                // etiketi küçük bir kapsül içine koyuyorum, yoksa üstündeki başlıkla
-                                // (24 SAATLİK TAHMİN) çakışıp karman çorman görünüyordu
+                                // "şu an" çizgisi, kendi kapsülü içindeki saatle
                                 RuleMark(x: .value("Şu An", timeline.date))
                                     .foregroundStyle(.white.opacity(0.5))
                                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
@@ -225,12 +188,6 @@ struct WeatherContentView: View {
                             .frame(height: 120)
                             .chartXAxis {
                                 AxisMarks(values: .stride(by: .hour, count: 3)) { _ in
-                                    // burada saat dilimini AÇIKÇA belirtmezsek, swiftui varsayılan
-                                    // olarak cihazın kendi saat dilimini kullanıyor — türkiye'ye
-                                    // yakın şehirlerde fark etmiyordu ama arizona/şili gibi uzak
-                                    // saat dilimlerinde eksendeki saatler şehrin gerçek yerel
-                                    // saatiyle uyuşmuyordu (grafiğin üstündeki "şu an" etiketi zaten
-                                    // cityTimeZone kullanıyordu, eksen etiketleri kullanmıyordu)
                                     AxisValueLabel(format: Date.FormatStyle(timeZone: cityTimeZone).hour())
                                         .foregroundStyle(.white)
                                 }
@@ -245,14 +202,10 @@ struct WeatherContentView: View {
 
                 Spacer().frame(height: 20)
 
-                // günlük tahmin listesi
                 if !daily.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {
                         sectionHeader("ÖNÜMÜZDEKİ GÜNLER", icon: "calendar")
 
-                        // 7 günün içinden, yağış olasılığı en düşük ve havası
-                        // en açık olanı öne çıkarıyorum — hiçbir hava durumu
-                        // uygulamasının doğrudan söylemediği bir öneri
                         if let bestDay = daily.bestOutdoorDay {
                             HStack(spacing: 6) {
                                 Image(systemName: "checkmark.seal.fill")
@@ -279,7 +232,6 @@ struct WeatherContentView: View {
 
                 Spacer().frame(height: 20)
 
-                // hava kalitesi kartı
                 if let airQuality {
                     AirQualityCard(airQuality: airQuality)
                         .padding(.horizontal, 20)
@@ -287,42 +239,16 @@ struct WeatherContentView: View {
                     Spacer().frame(height: 20)
                 }
 
-                // alt kısım, detay kutuları ızgarası
-                GlassEffectContainer {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                        WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel, trend: weather.humidityTrend)
-                        WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
-
-                        WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike), note: weather.feelsLikeDeltaLabel)
-                        WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa", note: weather.pressureLabel, trend: weather.pressureTrend)
-
-                        WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km", note: weather.visibilityLabel)
-                        WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted, note: weather.cloudinessLabel)
-
-                        WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint), note: weather.dewPointComfortLabel)
-                        SunTimesBox(
-                            sunrise: weather.sunrise,
-                            sunset: weather.sunset,
-                            sunsetQualityScore: weather.sunsetQualityScore,
-                            sunsetQualityLabel: weather.sunsetQualityLabel
-                        )
-
-                        // o geceki ay evresi, hiçbir yeni ağ isteği gerekmiyor,
-                        // tamamen tarihten hesaplanıyor (bkz. Utilities/MoonPhase.swift)
-                        MoonPhaseBox(phase: weather.moonPhase, illuminationPercent: weather.moonIlluminationPercent)
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                detailsGrid
+                    .weatherGlassEffectContainer()
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 40)
             }
         }
         .refreshable { onRefresh() }
         .sensoryFeedback(.success, trigger: lastUpdated)
-        // ekranın sağ üst köşesinde, kaydırma sırasında yerinde sabit kalan
-        // (overlay, scrollview'ın kendi çerçevesine bağlı, içeriğe değil)
-        // yüzen bir düğme — apple'ın hava durumu uygulamasında hiç olmayan,
-        // bilerek eklediğim özgün bir dokunuş: o an bakılan şehir/yer
-        // hakkında vikipedi'den küçük bir "ilginç bilgi" gösteriyor
+        // yüzen köşe düğmesi, kaydırırken de yerinde sabit kalıyor (overlay
+        // scrollview'ın çerçevesine bağlı, içeriğe değil)
         .overlay(alignment: .topTrailing) {
             cityFactButton
         }
@@ -331,9 +257,29 @@ struct WeatherContentView: View {
         }
     }
 
-    // ampul: "burada bir bilgi/fikir var" çağrışımı yapan, uygulamanın geri
-    // kalanında hiç kullanılmayan, bilerek amber renkli, kendine has bir ikon —
-    // diğer köşe düğmelerinden (yıldız, paylaş) bilinçli olarak farklı dursun diye
+    private var detailsGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+            WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel, trend: weather.humidityTrend)
+            WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
+
+            WeatherDetailBox(icon: "thermometer.sun", iconColor: .orange, title: "HİSSEDİLEN", value: unit.format(weather.feelsLike), note: weather.feelsLikeDeltaLabel)
+            WeatherDetailBox(icon: "barometer", iconColor: .purple, title: "BASINÇ", value: "\(weather.pressure) hPa", note: weather.pressureLabel, trend: weather.pressureTrend)
+
+            WeatherDetailBox(icon: "eye", iconColor: .teal, title: "GÖRÜŞ", value: "\(weather.visibility / 1000) km", note: weather.visibilityLabel)
+            WeatherDetailBox(icon: "cloud", iconColor: .gray, title: "BULUTLULUK", value: weather.cloudiness.percentFormatted, note: weather.cloudinessLabel)
+
+            WeatherDetailBox(icon: "thermometer.and.liquid.waves", iconColor: .cyan, title: "ÇİĞ NOKTASI", value: unit.format(weather.dewPoint), note: weather.dewPointComfortLabel)
+            SunTimesBox(
+                sunrise: weather.sunrise,
+                sunset: weather.sunset,
+                sunsetQualityScore: weather.sunsetQualityScore,
+                sunsetQualityLabel: weather.sunsetQualityLabel
+            )
+
+            MoonPhaseBox(phase: weather.moonPhase, illuminationPercent: weather.moonIlluminationPercent)
+        }
+    }
+
     private var cityFactButton: some View {
         Button {
             showCityFact = true
@@ -350,7 +296,6 @@ struct WeatherContentView: View {
         .accessibilityLabel(String(localized: "fact.button_label", defaultValue: "İlginç bilgi göster"))
     }
 
-    // MARK: - hissedilen sıcaklık notu
     private func feelsLikeNote(for weather: CityWeather) -> String {
         weather.feelsLike > weather.temperature
             ? String(localized: "weather.feels_warmer", defaultValue: "Gerçek sıcaklıktan daha sıcak hissettiriyor")
@@ -368,10 +313,6 @@ struct WeatherContentView: View {
         .padding(.horizontal, 5)
     }
 
-    // düz, tek renkli bir sf symbol yerine, apple'ın kendi sistem
-    // uygulamalarında (sağlık, hatırlatıcılar) gördüğümüz gibi ince bir
-    // halkalı, yumuşak dolgulu bir rozet içine oturtuyorum — aynı ikon,
-    // çok daha "tasarlanmış" hissettiriyor
     private func iconBadge(_ systemName: String, tint: Color) -> some View {
         Image(systemName: systemName)
             .font(.system(size: 13, weight: .semibold))

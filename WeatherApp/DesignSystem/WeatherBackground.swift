@@ -7,14 +7,8 @@
 
 import SwiftUI
 
-// MARK: - hava durumuna ve saate göre renk paleti
-// eskiden her hava kodu için tek (hep gündüz varsayan) bir renk çifti vardı.
-// artık gece/gündüz bilgisine de bakıyorum, böylece arka plan gerçekten o an
-// dışarısı nasılsa öyle hissettiriyor
+// hava koduna ve gece/gündüz durumuna göre renk paleti
 enum WeatherPalette {
-    // saatin şu an gece aralığında olup olmadığı, hem asıl hava paletinde hem
-    // de aşağıdaki nötr "chrome" palette'inde kullanılıyor, ikisi de tek
-    // yerden aynı kurala bakıyor
     static var isCurrentlyNight: Bool {
         let hour = Calendar.current.component(.hour, from: .now)
         return hour < 6 || hour >= 19
@@ -24,11 +18,8 @@ enum WeatherPalette {
         isNight ? nightColors(for: conditionCode) : dayColors(for: conditionCode)
     }
 
-    // ayarlar/filtre gibi hava durumuna bağlı olmayan ekranlar için nötr bir
-    // palet. parlak hava renklerini (turuncu/mavi) buraya hiç taşımıyorum,
-    // hem okunabilirlik için hem de kendine has bir görünüm için — ama artık
-    // sabit tek renk değil, o ekranı açtığın saate göre gündüz/gece arası
-    // geçiş yapıyor, yoksa gündüz vakti aniden zifiri karanlık görünüyordu
+    // ayarlar/filtre gibi hava durumuna bağlı olmayan ekranlar için nötr, ama
+    // saatle birlikte gündüz/gece arasında geçiş yapan bir palet
     static var chromeColors: [Color] {
         isCurrentlyNight ? chromeColorsNight : chromeColorsDay
     }
@@ -68,9 +59,6 @@ enum WeatherPalette {
     }
 }
 
-// MARK: - parçacık türü
-// her hava durumuna parçacık eklemek abartı olur, sadece anlamlı olan
-// durumlarda (yağmur, fırtına, kar, açık gece) hafif bir doku ekliyorum
 enum WeatherParticleStyle: Hashable {
     case rain
     case storm
@@ -93,18 +81,12 @@ enum WeatherParticleStyle: Hashable {
     }
 }
 
-// MARK: - parçacık katmanı
-// önemli kural: bir parçacığın konumunu her karede sadece geçen süreden
-// hesaplıyorum, hiçbir diziyi elle güncellemiyorum. elle güncelleseydim
-// zamanla bellek/işlemci kullanımı artardı. Canvas tek bir çizim çağrısı
-// olduğu için parçacık sayısı artsa bile maliyet neredeyse sabit kalıyor
+// zamana göre hesaplanan, durum tutmayan parçacık katmanı
 struct WeatherParticleLayer: View {
     let style: WeatherParticleStyle
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let seeds: [ParticleSeed]
-    // yağmurun düşüş açısını rüzgar yönüne göre hafifçe eğiyorum, küçük ama
-    // hoş bir detay. rüzgar bilgisi yoksa nötr, hafif bir eğimde kalıyor
     private let windTilt: Double
 
     init(style: WeatherParticleStyle, windDeg: Int? = nil) {
@@ -153,9 +135,6 @@ struct WeatherParticleLayer: View {
         }
     }
 
-    // MARK: yağmur — ince, rüzgara göre eğik düşen çizgiler
-    // her damlanın kendi "derinliği" var: yakın damlalar büyük ve hızlı, uzak
-    // olanlar ince ve yavaş düşüyor. basit ama gerçekçi bir derinlik hissi veriyor
     private func drawRain(in context: inout GraphicsContext, size: CGSize, elapsed: Double) {
         for seed in seeds {
             let depthSpeed = 0.7 + seed.depth * 0.9
@@ -176,9 +155,6 @@ struct WeatherParticleLayer: View {
         }
     }
 
-    // MARK: kar — yavaşça düşen, hafif savrulan taneler
-    // burada da aynı mantık: yakın taneler büyük ve net, uzak taneler küçük
-    // ve soluk düşüyor
     private func drawSnow(in context: inout GraphicsContext, size: CGSize, elapsed: Double) {
         for seed in seeds {
             let depthSpeed = 0.6 + seed.depth * 0.8
@@ -196,12 +172,9 @@ struct WeatherParticleLayer: View {
         }
     }
 
-    // MARK: bulutlu — birkaç büyük, yumuşak bulut yavaşça kayıyor
     private func drawClouds(in context: inout GraphicsContext, size: CGSize, elapsed: Double) {
         for seed in seeds {
             let driftSpeed = 0.025 * seed.speed
-            // ekranın biraz dışından girip biraz dışından çıkıyor ki
-            // kesilme anı fark edilmesin
             let loopPosition = (elapsed * driftSpeed + seed.phase).truncatingRemainder(dividingBy: 1.6) - 0.3
             let x = loopPosition * size.width
             let y = seed.y * size.height * 0.65
@@ -214,23 +187,19 @@ struct WeatherParticleLayer: View {
         }
     }
 
-    // MARK: açık gece — sabit duran, göz kırpan yıldızlar
     private func drawStars(in context: inout GraphicsContext, size: CGSize, elapsed: Double) {
         for seed in seeds {
             let twinkle = (sin(elapsed * seed.speed + seed.phase * .pi * 2) + 1) / 2
             let opacity = 0.25 + twinkle * 0.55
             let radius = 0.8 + seed.scale * 0.6
             let x = seed.x * size.width
-            let y = seed.y * size.height * 0.6 // yıldızlar hep ekranın üst kısmında kalsın
+            let y = seed.y * size.height * 0.6
 
             let rect = CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)
             context.fill(Path(ellipseIn: rect), with: .color(.white.opacity(opacity)))
         }
     }
 
-    // MARK: sis — yavaşça kayan, yumuşak yatay bantlar
-    // bantlar sadece yana kaymıyor, saydamlıkları da yavaşça değişiyor, sis
-    // durağan değil canlı bir doku gibi hissettirsin diye
     private func drawFog(in context: inout GraphicsContext, size: CGSize, elapsed: Double) {
         for (index, seed) in seeds.enumerated() {
             let bandHeight = size.height / CGFloat(seeds.count) * 1.6
@@ -245,10 +214,6 @@ struct WeatherParticleLayer: View {
     }
 }
 
-// MARK: şimşek flaşı
-// fırtınalı havada ekranı arada kısacık aydınlatan beyaz bir flaş. sadece
-// geçen süreye bakarak hesaplıyorum, hiçbir şey biriktirmiyorum, bu yüzden
-// ekran ne kadar uzun süre açık kalırsa kalsın maliyeti hep aynı kalıyor
 struct LightningFlashOverlay: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -278,8 +243,6 @@ struct LightningFlashOverlay: View {
     }
 }
 
-// MARK: - parçacık alanı
-// fırtınada parçacıklara ek olarak şimşek flaşı da ekleniyor
 struct WeatherParticleField: View {
     let style: WeatherParticleStyle
     let windDeg: Int?
@@ -294,15 +257,14 @@ struct WeatherParticleField: View {
     }
 }
 
-// bir parçacığın rastgele ama sabit başlangıç değerleri. görünüm ilk oluşurken
-// bir kere üretiliyor, sonra her karede aynı değerlerden zamana göre ilerliyor
+// rastgele ama sabit başlangıç değerleri, zamana göre ilerletiliyor
 private struct ParticleSeed {
-    let x: Double      // 0 ile 1 arası, genişliğe göre yatay konum
-    let y: Double      // 0 ile 1 arası, yüksekliğe göre dikey konum
+    let x: Double
+    let y: Double
     let speed: Double
-    let phase: Double  // 0 ile 1 arası başlangıç gecikmesi
+    let phase: Double
     let scale: Double
-    let depth: Double  // 0 = uzak (küçük, yavaş, soluk), 1 = yakın (büyük, hızlı, belirgin)
+    let depth: Double
 
     static func random() -> ParticleSeed {
         ParticleSeed(
@@ -316,8 +278,6 @@ private struct ParticleSeed {
     }
 }
 
-// MARK: - yumuşak, hareketli arka plan
-// şehir detay ekranının en alt katmanı, parçacıklar bunun üstüne ekleniyor
 struct AmbientBackgroundView: View {
     var colors: [Color]
     @State private var animate = false
@@ -345,8 +305,6 @@ struct AmbientBackgroundView: View {
                     .opacity(0.5)
             }
 
-            // kenarlara doğru hafif bir karartma, gözü ekranın ortasındaki
-            // sıcaklık/ikona çekiyor, arka plana biraz derinlik katıyor
             RadialGradient(
                 colors: [.clear, .black.opacity(0.22)],
                 center: .center,
@@ -364,10 +322,7 @@ struct AmbientBackgroundView: View {
     }
 }
 
-// MARK: - şehir detay ekranının tam arka planı
-// gündüz/gece ve hava koduna göre renk paletini seçip üstüne parçacık
-// katmanını ekliyor. bu zengin arka plan sadece şehir detay ekranında var,
-// ana ekran daha sade bir gradyanla kalıyor (pil ömrü ve göz karmaşası için)
+// şehir detay ekranının tam arka planı: renk paleti + parçacık katmanı
 struct WeatherBackground: View {
     let conditionCode: Int
     let isNight: Bool

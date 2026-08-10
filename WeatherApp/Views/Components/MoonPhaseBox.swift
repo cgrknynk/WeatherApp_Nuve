@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-// MARK: - ay evresi kutusu
-// diğer detay kutuları gibi tek bir sayı/kelime değil, ayın o anki
-// GÖRÜNÜMÜNÜ de gösteriyor — sf symbols'ün moonphase.* seti zaten gerçek bir
-// çizim (hilal gerçekten hilal şeklinde). kutunun kendi genişliği diğer
-// kutularla AYNI (ızgaradaki tek hücreye sığması gerekiyor), o yüzden büyük
-// ikonu metnin YANINA değil, kartın arka planına, sağ-alt köşeden taşan
-// soluk bir "filigran" olarak yerleştiriyoruz — metin okunurluğunu hiç
-// bozmadan görsel bir karakter katıyor
 struct MoonPhaseBox: View {
     let phase: MoonPhase
     let illuminationPercent: Int

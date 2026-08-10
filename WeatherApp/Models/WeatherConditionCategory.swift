@@ -7,10 +7,6 @@
 
 import Foundation
 
-// MARK: - filtrede seçilebilen kaba hava durumu kategorileri
-// diğer yerlerdeki ince ayrımlardan (drizzle, rain, storm gibi) bilerek daha
-// basit tutuyorum, çünkü filtre ekranında kullanıcıya bu kadar ince seçenek
-// sunmak kafa karıştırır. sadece filtre özelliği için kullanılıyor
 enum WeatherConditionCategory: String, CaseIterable, Identifiable {
     case clear
     case cloudy
@@ -56,10 +52,6 @@ enum WeatherConditionCategory: String, CaseIterable, Identifiable {
     }
 }
 
-// MARK: - favori listesini filtreleme
-// hem hava durumu kategorisine hem sıcaklık aralığına göre filtreliyorum.
-// sıcaklığı her zaman celsius olarak tutuyorum, kullanıcının seçtiği birime
-// sadece ekranda gösterirken çeviriyorum, uygulamanın her yerinde yaptığım gibi
 struct WeatherFilter {
     var categories: Set<WeatherConditionCategory> = []
     var minTemperatureCelsius: Double = -30
@@ -69,9 +61,7 @@ struct WeatherFilter {
         !categories.isEmpty || minTemperatureCelsius > -30 || maxTemperatureCelsius < 50
     }
 
-    // veri henüz gelmediyse (favori satırı hâlâ yükleniyorsa) ve filtre
-    // aktifse, o satırı belirsiz göstermek yerine listeden gizliyorum. filtre
-    // kapalıyken zaten her satır gösteriliyor
+    // veri henüz gelmediyse ve filtre aktifse, satırı listeden gizler
     func matches(_ weather: CityWeather?) -> Bool {
         guard isActive else { return true }
         guard let weather else { return false }

@@ -7,16 +7,9 @@
 
 import SwiftUI
 
-// MARK: - gündoğumu / günbatımı kutusu
-// sunrise ve sunset zaten çekiliyordu ama sadece gece/gündüz hesabında
-// kullanılıyordu, hiç gerçek saat olarak gösterilmiyordu. shortened biçimi
-// telefonun 12/24 saat ayarına otomatik uyuyor
 struct SunTimesBox: View {
     let sunrise: Date?
     let sunset: Date?
-    // 1-10 arası, günbatımının ne kadar "güzel" olabileceğine dair kaba bir
-    // tahmin (bkz. CityWeather.sunsetQualityScore) — hiçbir hava durumu
-    // uygulamasının vermediği, özgün bir dokunuş
     let sunsetQualityScore: Int
     let sunsetQualityLabel: String
 
@@ -47,8 +40,6 @@ struct SunTimesBox: View {
             .font(.weatherCaption.bold())
             .foregroundColor(.white)
 
-            // lineLimit(2) + fixedSize: uzun bir etiket geldiğinde "..." ile
-            // kesilmek yerine gerektiğinde iki satıra düzgünce sarsın diye
             HStack(alignment: .top, spacing: 5) {
                 Image(systemName: "wand.and.stars")
                     .font(.system(size: 10, weight: .semibold))

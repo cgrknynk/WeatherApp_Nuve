@@ -7,29 +7,17 @@
 
 import Foundation
 
-// MARK: - "neresi" sorusunun cevabı
-// openweather'ın ücretsiz servisini artık sadece isim/ülke/koordinat bulmak
-// için kullanıyorum. open-meteo bir şehir veritabanı değil, sadece hava
-// durumu hesaplıyor, isimden koordinat bulamıyor. asıl sıcaklık verisi
-// aşağıdaki open-meteo modelinden geliyor. nonisolated yazmamın sebebi,
-// proje genelinde her şey mainactor'a bağlı ama bu decode işlemi ana
-// thread'e sıkışmasın istiyorum
+// openweather: sadece isim/ülke/koordinat
 private nonisolated struct LocationIdentityResponse: Codable {
     let name: String
     let coord: Coord
     let sys: Sys
 
     struct Coord: Codable { let lat: Double; let lon: Double }
-    // ülke kodu her zaman gelmiyor - antarktika gibi resmi bir ülkesi olmayan
-    // yerlerde bu alan api cevabında hiç bulunmuyor, o yüzden opsiyonel
     struct Sys: Codable { let country: String? }
 }
 
-// MARK: - "ne durumda" sorusunun cevabı
-// tek bir istekte anlık durumu, saatlik ve günlük tahmini birlikte veriyor.
-// günlük en düşük/en yüksek değerleri openweather'daki gibi tahmini değil,
-// o günün tüm saatlik verisinden gerçekten hesaplanıyor, küçük şehirlerde
-// bile güvenilir (detaylı hikaye Kod-Rehberi.md'de var)
+// open-meteo: anlık durum + saatlik + günlük tahmin, tek istekte
 private nonisolated struct OpenMeteoResponse: Codable {
     let utc_offset_seconds: Int
     let current: Current
@@ -45,9 +33,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
         let pressure_msl: Double
         let visibility: Double
         let wind_speed_10m: Double
-        // rüzgar hızı sıfırken (dingin hava) yönün bir anlamı kalmıyor —
-        // open-meteo bu durumda alanı hiç göndermeyebiliyor, o yüzden
-        // opsiyonel: CityWeather.windDeg zaten Int? kabul ediyordu
         let wind_direction_10m: Int?
         let wind_gusts_10m: Double?
     }
@@ -55,8 +40,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
     struct Hourly: Codable {
         let time: [String]
         let temperature_2m: [Double]
-        // basınç/nem trend oklarını hesaplamak için — "şimdi" (index 0) ile
-        // "3 saat sonra" (index 3) arasındaki farka bakıyoruz
         let pressure_msl: [Double]
         let relative_humidity_2m: [Int]
     }
@@ -71,9 +54,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
         let sunset: [String]
     }
 
-    // "yağış birazdan başlıyor" uyarısı için 15 dakikalık çözünürlükte veri.
-    // opsiyonel çünkü çok nadir istisnai bir bölgede open-meteo bunu hiç
-    // vermeyebilir, o durumda uyarıyı sessizce hiç göstermiyoruz
     let minutely_15: Minutely15?
 
     struct Minutely15: Codable {
@@ -81,7 +61,6 @@ private nonisolated struct OpenMeteoResponse: Codable {
     }
 }
 
-// MARK: - hava kalitesi cevabı
 private nonisolated struct AirPollutionResponse: Codable {
     let list: [Item]
     struct Item: Codable {
@@ -90,28 +69,18 @@ private nonisolated struct AirPollutionResponse: Codable {
     }
 }
 
-// MARK: - hava durumu + tahmin paketi
-// open-meteo tek istekte anlık durumu, saatlik ve günlük tahmini birlikte
-// verdiği için viewmodel artık iki ayrı istek atmıyor, tek çağrı yetiyor
 struct WeatherBundle: Sendable {
     let current: CityWeather
     let hourly: [HourlyForecast]
     let daily: [DailyForecast]
 }
 
-// MARK: - servisin sözleşmesi
-// eskiden bir delegate üzerinden haber veriyordu, servis zaten async/await
-// kullandığı için buna gerek kalmadı. artık direkt sonucu döndürüyor ya da
-// hata fırlatıyor, viewmodel tarafında tek bir do/catch yeterli
 nonisolated protocol WeatherServiceProtocol: Sendable {
     func fetchWeather(for cityName: String) async throws -> WeatherBundle
     func fetchWeather(lat: Double, lon: Double) async throws -> WeatherBundle
     func fetchAirQuality(lat: Double, lon: Double) async throws -> AirQuality
 }
 
-// MARK: - konum üzerinden ortak çağrı (WeatherLocation)
-// isim mi koordinat mı diye her yerde tekrar tekrar yazmamak için bu
-// dallanmayı protokolün kendisine ekleyip tek yerden paylaşıyorum
 extension WeatherServiceProtocol {
     func fetchWeather(at location: WeatherLocation) async throws -> WeatherBundle {
         switch location {
@@ -123,25 +92,11 @@ extension WeatherServiceProtocol {
     }
 }
 
-// MARK: - asıl ağ servisi
-// hiçbir değişken durumu yok (sadece sabit bir api anahtarı tutuyor), o yüzden
-// class değil struct kullandım, her yerde güvenle yeniden yaratılabiliyor.
-// nonisolated koydum çünkü proje genelinde her şey mainactor'a bağlı ama ağ
-// isteği ana thread'i kilitlemesin istiyorum
-//
-// iki farklı sağlayıcı kullanıyorum, bilerek: openweather'ın ücretsiz servisi
-// küçük şehirlerde en düşük/en yüksek sıcaklığı güvenilir vermiyor, kendi
-// belgelerinde bile bunun "o anki ölçüme yakın bir tahmin" olduğunu yazıyorlar.
-// open-meteo ise günlük değerleri o günün tüm saatlik verisinden hesaplıyor,
-// hem küçük şehirlerde de tutarlı hem tamamen ücretsiz. ama open-meteo şehir
-// arama yapamıyor, sadece koordinat kabul ediyor. o yüzden isim/koordinat
-// bulma işini openweather'da bırakıp asıl sıcaklık verisini open-meteo'dan
-// çekiyorum
+// openweather: konum. open-meteo: hava durumu sayıları
 nonisolated struct WeatherService: WeatherServiceProtocol {
 
     private let apiKey = Secrets.openWeatherAPIKey
 
-    // MARK: - isimle ya da koordinatla hava durumu çekme
     func fetchWeather(for cityName: String) async throws -> WeatherBundle {
         guard let encodedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             throw WeatherError.invalidResponse
@@ -159,7 +114,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         return try await fetchWeather(identity: identity)
     }
 
-    // MARK: - konum kimliğini bulma
     private struct LocationIdentity {
         let name: String
         let country: String
@@ -187,7 +141,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         )
     }
 
-    // MARK: - open-meteo'dan asıl sıcaklık verisini çekme
     private func fetchWeather(identity: LocationIdentity) async throws -> WeatherBundle {
         let urlString = "https://api.open-meteo.com/v1/forecast"
             + "?latitude=\(identity.lat)&longitude=\(identity.lon)"
@@ -204,10 +157,7 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             throw WeatherError.decoding
         }
 
-        // open-meteo'nun zaman metinleri (mesela "2026-08-03T14:00") zaten o
-        // şehrin kendi yerel saatinde geliyor, o yüzden çözerken de şehrin
-        // kendi utc farkını kullanıyorum, telefonun saat dilimini değil. yoksa
-        // yurt dışı bir şehre bakarken saatler kayardı
+        // zaman metinleri şehrin kendi utc farkına göre çözülüyor
         let timeZone = TimeZone(secondsFromGMT: decoded.utc_offset_seconds) ?? .current
         let dateTimeFormatter = Self.formatter(dateFormat: "yyyy-MM-dd'T'HH:mm", timeZone: timeZone)
         let dayFormatter = Self.formatter(dateFormat: "yyyy-MM-dd", timeZone: timeZone)
@@ -240,9 +190,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             humidityTrend: Self.trend(from: decoded.hourly.relative_humidity_2m.map(Double.init), threshold: 3)
         )
 
-        // forecast_hours=24 dediğim için open-meteo şu anki saatten itibaren
-        // tam 24 saatlik veri veriyor, elle "ilk 8 tanesini al" gibi bir
-        // kırpmaya gerek kalmadı
         let hourly: [HourlyForecast] = (0..<decoded.hourly.time.count).compactMap { index in
             guard let date = dateTimeFormatter.date(from: decoded.hourly.time[index]) else { return nil }
             return HourlyForecast(
@@ -251,8 +198,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
             )
         }
 
-        // open-meteo günleri zaten şehrin kendi takvimine göre gruplayıp
-        // veriyor, elle gün bölme mantığına gerek kalmadı
         let daily: [DailyForecast] = (0..<decoded.daily.time.count).compactMap { index in
             guard let date = dayFormatter.date(from: decoded.daily.time[index]) else { return nil }
             return DailyForecast(
@@ -267,9 +212,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         return WeatherBundle(current: current, hourly: hourly, daily: daily)
     }
 
-    // MARK: - hava kalitesini çekme
-    // bu ayrı openweather servisi zaten sorunsuz çalışıyordu, sadece sıcaklık
-    // verisini değiştirdim, hava kalitesine hiç dokunmadım
     func fetchAirQuality(lat: Double, lon: Double) async throws -> AirQuality {
         let urlString = "https://api.openweathermap.org/data/2.5/air_pollution?lat=\(lat)&lon=\(lon)&appid=\(apiKey)"
         guard let url = URL(string: urlString) else { throw WeatherError.invalidResponse }
@@ -283,9 +225,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         return AirQuality(aqi: firstReading.main.aqi)
     }
 
-    // MARK: - ortak ağ isteği
-    // üç fonksiyonun da tekrar tekrar yazacağı urlsession çağrısını burada
-    // topladım, bağlantı hatasını da tek bir WeatherError'a çeviriyorum
     private func requestData(from url: URL) async throws -> (Data, URLResponse) {
         do {
             return try await URLSession.shared.data(from: url)
@@ -294,17 +233,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         }
     }
 
-    // MARK: - open-meteo'nun zaman metinlerini çözme
-    // "2026-08-03T14:00" gibi bir metni, şehrin kendi utc farkına göre gerçek
-    // bir Date'e çeviriyorum. en_US_POSIX kullanıyorum çünkü sabit formatlı
-    // tarihleri okurken telefonun bölge ayarından etkilenmek istemiyorum.
-    // hem saatlik hem günlük zaman metinleri aynı mantıkla çözülüyor, tek
-    // farkları format string'i, o yüzden tek fonksiyon yeterli
-    // MARK: - "yağış birazdan başlıyor" mesajını üretme
-    // 15 dakikalık dilimlerdeki yağış miktarına bakıp, önümüzdeki 2 saat
-    // içinde (8 dilim) yağışın ne zaman başlayacağını/duracağını tahmin
-    // ediyorum. eşik değeri (0.1mm) open-meteo'nun kendi belgelerinde
-    // "hissedilir yağış" için önerdiği kabaca sınır
     private static func nowcastMessage(from minutely: OpenMeteoResponse.Minutely15?) -> String? {
         guard let precipitation = minutely?.precipitation, !precipitation.isEmpty else { return nil }
         let threshold = 0.1
@@ -329,11 +257,6 @@ nonisolated struct WeatherService: WeatherServiceProtocol {
         return String(localized: "nowcast.clear", defaultValue: "Önümüzdeki 2 saat içinde yağış beklenmiyor")
     }
 
-    // MARK: - basınç/nem trend oku
-    // "şimdi" (index 0) ile "3 saat sonra" (index 3) arasındaki farka bakıp
-    // yükseliyor/düşüyor/sabit diyoruz — yeni bir ağ isteği gerekmiyor,
-    // zaten çekilen saatlik veriden. eşik altındaki ufak dalgalanmaları
-    // (ölçüm gürültüsü) "sabit" sayıp gereksiz ok göstermiyoruz
     private static func trend(from values: [Double], threshold: Double) -> WeatherTrend? {
         guard values.count > 3 else { return nil }
         let delta = values[3] - values[0]

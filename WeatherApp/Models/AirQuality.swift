@@ -7,14 +7,9 @@
 
 import SwiftUI
 
-// MARK: - hava kalitesi
-// api'nin ayrı ve ücretsiz kirlilik servisinden gelen endeksi (1: iyi, 5: çok
-// kötü) ekranda göstermek için hazırladığım küçük model
 struct AirQuality {
     let aqi: Int
 
-    // bu metin ekrana Text(airQuality.label) gibi bir değişken üzerinden
-    // basılıyor, düz yazı değil, o yüzden String(localized:) ile kendim çeviriyorum
     var label: String {
         switch aqi {
         case 1: return String(localized: "aqi.good", defaultValue: "İyi")

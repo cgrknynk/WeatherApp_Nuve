@@ -7,13 +7,7 @@
 
 import Foundation
 
-// MARK: - wmo hava kodunu eski sisteme çevirme
-// open-meteo hava durumunu openweather gibi kendi kod setiyle değil, standart
-// wmo koduyla (0-99) veriyor. ama uygulamanın geri kalanı (ikon seçimi, arka
-// plan rengi, parçacık efekti, filtre) hâlâ openweather'ın eski aralık
-// mantığına göre çalışıyor (200-232 fırtına, 500-531 yağmur, 600-622 kar gibi).
-// hepsini değiştirmek yerine, wmo kodunu bu aralıklardan birine düşen bir
-// sayıya çeviriyorum, böylece o eski switch'lerin hiçbirine dokunmuyorum
+// wmo kodunu openweather'ın eski aralık koduna çevirir
 nonisolated enum WMOWeatherCode {
 
     static func legacyConditionCode(for wmoCode: Int) -> Int {
@@ -47,11 +41,6 @@ nonisolated enum WMOWeatherCode {
         }
     }
 
-    // open-meteo openweather'ın aksine hazır bir açıklama metni vermiyor,
-    // sadece bir sayı veriyor. metni burada kendim üretiyorum, bu aslında
-    // daha güvenilir çünkü uygulamanın kendi çeviri dosyasıyla tam tutarlı.
-    // bu metin bir değişken üzerinden gösterildiği için swiftui'nin otomatik
-    // çeviri sistemi işe yaramıyor, String(localized:) ile kendim çeviriyorum
     static func localizedDescription(for wmoCode: Int) -> String {
         switch wmoCode {
         case 0:  return String(localized: "wmo.clear", defaultValue: "Açık")
@@ -73,10 +62,6 @@ nonisolated enum WMOWeatherCode {
         }
     }
 
-    // legacy koddan ekrandaki ikonun adını seçiyor. hem anlık hava durumu
-    // (gece/gündüz farkı olan) hem günlük tahmin (hep gündüz ikonu) burayı
-    // kullanıyordu, aynı switch iki dosyada ayrı ayrı yazılıyordu — tek
-    // yere topladım. isNight varsayılan false, günlük tahmin hiç vermiyor
     static func systemIconName(for legacyConditionCode: Int, isNight: Bool = false) -> String {
         switch legacyConditionCode {
         case 200...232: return "cloud.bolt.rain.fill"

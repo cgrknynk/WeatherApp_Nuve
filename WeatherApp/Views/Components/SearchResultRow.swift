@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-// MARK: - arama sonucu satırı
-// eskiden mapkit'in ham alt başlığını da gösteriyordum (mesela "kayseri
-// province, turkey" gibi) ama bu metin uygulamanın diline göre değil
-// mapkit'in kendi veritabanına göre geliyordu, türkçe aramada bile ingilizce
-// kelimeler çıkabiliyordu. güvenilir şekilde düzeltemediğim için tamamen
-// kaldırdım, artık sadece şehir ismi var
 struct SearchResultRow: View {
     let title: String
 

@@ -2,17 +2,9 @@
 //  ShareableWeatherCard.swift
 //  WeatherApp
 //
-//  Created by Çağrı Kaan YANIK on 08.08.2026.
-//
 
 import SwiftUI
 
-// MARK: - paylaşım için özel çizilen, şık bir görsel kart
-// eskiden paylaşım sadece düz bir metindi ("İzmir: 24°, Az Bulutlu" gibi).
-// bunun yerine, uygulamanın kendi cam tasarım diliyle çizilmiş bu View'ı
-// ImageRenderer ile bir resme çevirip, o resmi paylaşıyoruz (bkz.
-// WeatherView.swift'teki paylaş düğmesi) — Instagram hikayesi gibi
-// paylaşılabilir, tek başına anlamlı, markalı bir görsel çıkıyor
 struct ShareableWeatherCard: View {
     let weather: CityWeather
     let unit: TemperatureUnit

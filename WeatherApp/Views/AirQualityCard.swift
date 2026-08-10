@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// MARK: - hava kalitesi kartı
-// ayrı ve ücretsiz kirlilik servisinden gelen endeksi şehir detay ekranında
-// küçük bir cam kart olarak gösteriyorum
 struct AirQualityCard: View {
     let airQuality: AirQuality
 

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// MARK: - rüzgar kutusu, yön pusulası dahil
 struct WindDetailBox: View {
     let speedKmh: Double
     let degrees: Int?
@@ -38,12 +37,6 @@ struct WindDetailBox: View {
                 }
             }
 
-            // api bazen rüzgar hamlesini de veriyor, önceden hiç okumuyordum.
-            // "rüzgar" kelimesini burada tekrar etmiyoruz, kutunun kendi
-            // başlığı zaten "RÜZGAR" — küçük, ince bir rozet içindeki ok
-            // ikonu da "ani/keskin" hissini görsel olarak destekliyor.
-            // lineLimit(2) + fixedSize: metin sıkışınca "..." ile kesilmek
-            // yerine gerektiğinde iki satıra düzgünce sarsın diye
             if let gustKmh, gustKmh > speedKmh {
                 HStack(spacing: 5) {
                     Image(systemName: "arrow.up.forward")

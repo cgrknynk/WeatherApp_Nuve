@@ -7,23 +7,12 @@
 
 import SwiftUI
 
-// MARK: - cam efektli detay kutusu
-// title'ı bilerek LocalizedStringKey yaptım: çağıran taraf hep sabit bir metin
-// geçiyor ("NEM", "BASINÇ" gibi), bu tip sayesinde swiftui bunu otomatik
-// çeviri kataloğunda arıyor. düz String olsaydı bu otomatik arama çalışmazdı
 struct WeatherDetailBox: View {
     var icon: String
-    // apple'ın kendi detay kartlarında olduğu gibi her ikon kendi anlamına
-    // uygun bir renk taşıyor (nem mavi, basınç mor gibi), düz beyazdan daha canlı duruyor
     var iconColor: Color
     var title: LocalizedStringKey
     var value: String
-    // çıplak bir sayı ("%38" gibi) tek başına yorumsuz kalıyordu — bu kısa
-    // etiket ("Rahat"/"Kuru" gibi) sayının ne anlama geldiğini ekliyor.
-    // opsiyonel: her kutunun anlamlı bir yorumu olmayabilir
     var note: String? = nil
-    // basınç/nem gibi kısa vadeli değerlerin yönünü gösteren küçük ok —
-    // sadece bunu destekleyen kutular veriyor (bkz. WeatherContentView)
     var trend: WeatherTrend? = nil
 
     var body: some View {
@@ -61,8 +50,6 @@ struct WeatherDetailBox: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: weatherDetailBoxHeight)
         .weatherGlassCard(accentTint: iconColor)
-        // voiceover bunu "nem, %65" gibi tek bir cümle olarak okusun diye,
-        // yoksa ikon/etiket/değer ayrı ayrı, kopuk kopuk okunuyordu
         .accessibilityElement(children: .combine)
     }
 }

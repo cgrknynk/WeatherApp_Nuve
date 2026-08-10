@@ -1,10 +1,5 @@
 import SwiftUI
 
-// MARK: - boş/hatalı durumlarda gösterilen küçük uyarı kartı
-// sadece ikon + mesaj gösteriyor. eskiden içine bir de opsiyonel "tekrar
-// dene" butonu koymuştum ama hiçbir çağrı yeri bu butonu hiç kullanmadı
-// (favori listesi boş, konum izni yok, arama sonucu yok gibi durumların
-// hepsi sadece bilgilendiriyor), o yüzden kullanılmayan kısmı kaldırdım
 struct GlassWarningView: View {
     var iconName: String
     var message: String
@@ -29,7 +24,6 @@ struct GlassWarningView: View {
 
 #Preview {
     ZStack {
-        // sadece önizlemede görünsün diye arkaya geçici bir renk koydum
         LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
             .ignoresSafeArea()
 

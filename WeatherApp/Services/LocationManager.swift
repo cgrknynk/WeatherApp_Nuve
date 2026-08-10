@@ -10,8 +10,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     @Published var location: CLLocationCoordinate2D?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
-    @Published var displayLocationName: String? // örnek: "melikgazi, kayseri"
-    @Published var apiSearchCityName: String?   // örnek: "kayseri"
+    @Published var displayLocationName: String?
+    @Published var apiSearchCityName: String?
 
     override init() {
         super.init()
@@ -23,11 +23,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
     }
 
-    // kullanıcı uygulama arka plandayken ayarlar'dan konum iznini değiştirmiş
-    // olabilir. sistemin kendi bildirimi buna her zaman güvenilir şekilde haber
-    // vermiyor, o yüzden uygulama ön plana her döndüğünde izni burada elle
-    // tekrar kontrol ediyorum. durum gerçekten değiştiyse harekete geçiyorum,
-    // değişmediyse hiçbir şey yapmıyorum ki gereksiz bir istek atılmasın
+    // uygulama ön plana her döndüğünde izni elle tekrar kontrol eder
     func refreshAuthorizationStatusIfNeeded() {
         let currentStatus = manager.authorizationStatus
         guard currentStatus != authorizationStatus else { return }
@@ -37,7 +33,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             manager.startUpdatingLocation()
         case .denied, .restricted:
-            // izin geri alınmış, elimdeki eski konum artık geçersiz, temizliyorum
             location = nil
             displayLocationName = nil
             apiSearchCityName = nil
@@ -65,28 +60,20 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.manager.stopUpdatingLocation()
         }
 
-        guard let request = MKReverseGeocodingRequest(location: newLocation) else { return }
-
+        // CLGeocoder, MapKit'in iOS 26'ya özel adres api'sinden farklı olarak
+        // iOS 18'den beri değişmeden var, bu yüzden tersine geocode için onu kullanıyoruz
         Task {
             do {
-                let fetchedMapItems = try await request.mapItems
+                let placemarks = try await CLGeocoder().reverseGeocodeLocation(newLocation)
+                guard let placemark = placemarks.first else { return }
 
-                if let mapItem = fetchedMapItems.first, let address = mapItem.address {
+                let locationString = [placemark.locality, placemark.administrativeArea]
+                    .compactMap { $0 }
+                    .joined(separator: ", ")
 
-                    // shortAddress opsiyonel olabiliyor, o yüzden boş string'e düşürüyorum
-                    let locationString = address.shortAddress ?? ""
-
-                    await MainActor.run {
-                        self.displayLocationName = locationString.isEmpty ? "Konum Bulunamadı" : locationString
-
-                        // api'ye sadece şehir ismini göndermek için virgülle bölüp son parçayı alıyorum
-                        let components = locationString.components(separatedBy: ",")
-                        if let lastComponent = components.last?.trimmingCharacters(in: .whitespaces), !lastComponent.isEmpty {
-                            self.apiSearchCityName = lastComponent
-                        } else {
-                            self.apiSearchCityName = locationString
-                        }
-                    }
+                await MainActor.run {
+                    self.displayLocationName = locationString.isEmpty ? "Konum Bulunamadı" : locationString
+                    self.apiSearchCityName = placemark.locality ?? locationString
                 }
             } catch {
                 print("Adres çözümlenemedi: \(error.localizedDescription)")

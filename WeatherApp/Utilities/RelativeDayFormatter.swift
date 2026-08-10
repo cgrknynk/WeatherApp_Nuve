@@ -7,10 +7,6 @@
 
 import Foundation
 
-// MARK: - gün isimlerini yazdırma
-// artık telefonun sistem diline göre çalışıyor, eskiden hep türkçe yazdırıyordum.
-// apple'ın kendi hava durumu uygulamasındaki gibi bugün için "bugün", yarın
-// için "yarın" yazıyorum, gerisi haftanın günü ismi
 enum RelativeDayFormatter {
     static func label(for date: Date, calendar: Calendar) -> String {
         if calendar.isDateInToday(date) {

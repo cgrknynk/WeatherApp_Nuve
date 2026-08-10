@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-// MARK: - filtreye uyan şehirlerin ülkeye göre listesi
-// "uygula"ya basınca açılan sonuç ekranı. elimde tüm dünyayı tarayan ücretsiz
-// bir servis olmadığı için sadece favori şehirleri filtreleyip ülkelerine
-// göre grupluyorum.
-//
-// eskiden ülkeye dokununca ayrı bir ekrana geçip oradaki şehirleri
-// gösteriyordum, bu gereksiz bir adımdı. şimdi tek liste var, ülke sadece
-// bir başlık, altındaki şehirlere direkt dokunulabiliyor
 struct FilterResultsView: View {
     let filter: WeatherFilter
     let unit: TemperatureUnit
@@ -22,14 +14,7 @@ struct FilterResultsView: View {
 
     @Namespace private var zoomNamespace
 
-    // burada bir hata vardı: groups eskiden düz bir computed property'ydi,
-    // yani body her çağrıldığında yeniden hesaplanıyordu. bu ekranla hiç
-    // ilgisi olmayan bir veri değişse bile (paylaşılan viewModel yüzünden)
-    // body tekrar çalışıyordu. arka plandaki sürekli dönen animasyon açıkken
-    // bu sık tekrarlanan yeniden hesaplama, listenin yavaşça yukarı aşağı
-    // kayıyormuş gibi görünmesine sebep oluyordu. çözüm: sonucu bir kere
-    // hesaplayıp saklamak, sadece gerçekten gerektiğinde yeniden hesaplamak
-    @State private var groups: [CountryGroup] = []
+    @State private var groups: [CountryGroup] = [] // @State: gereksiz yeniden hesaplama olmasın
 
     private func recomputeGroups() {
         let matches: [FilteredCity] = viewModel.savedCities.compactMap { favorite in
@@ -71,7 +56,6 @@ struct FilterResultsView: View {
                                 cityRow(city)
                             }
                         } header: {
-                            // ülke adı artık sadece bir başlık, dokunulabilir bir satır değil
                             Text(group.country)
                                 .font(.weatherSectionHeader)
                                 .tracking(1.1)
@@ -85,9 +69,6 @@ struct FilterResultsView: View {
         .foregroundColor(.white)
         .navigationTitle("Sonuçlar")
         .navigationBarTitleDisplayMode(.inline)
-        // gezinme çubuğu bazen ilk karede kendi varsayılan rengini gösterip
-        // hemen ardından koyu temaya geçiyordu, bu bir titreme gibi
-        // görünüyordu. burayı açıkça koyu moda sabitleyince düzeldi
         .toolbarColorScheme(.dark, for: .navigationBar)
         .onAppear { recomputeGroups() }
         .onChange(of: viewModel.favoriteSnapshots) { _, _ in recomputeGroups() }
@@ -110,8 +91,6 @@ struct FilterResultsView: View {
     }
 }
 
-// MARK: - filtre sonucu modelleri
-// sadece ekranda göstermek için gereken bilgiyi tutuyorum, tüm CityWeather'ı değil
 struct FilteredCity: Identifiable {
     let name: String
     let temperature: Double

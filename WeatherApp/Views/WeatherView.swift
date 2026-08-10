@@ -1,34 +1,16 @@
 import SwiftUI
 import UIKit
 
-// MARK: - şehir detay ekranı
-// tek bir konumun hava durumunu gösteren ekran, arama sonucu, mevcut konum ve
-// favoriler hepsi bu ekrana geliyor, kod tekrarı olmasın diye
-//
-// not: favoriler arasında kaydırarak geçebilmek için ayrı bir karusel ekranı
-// yapmıştım ama kendi şerit göstergemi kaydırılabilir içeriğin üstüne sabit
-// bir yere koymak bir türlü tutarlı çalışmadı, on bir farklı yöntem denedim
-// hepsi bir şekilde bozuk çıktı. sonunda kaydırma fikrini tamamen bıraktım.
-// favoriler artık bu ekranı arama sonucu gibi tekil açıyor, diğer favorilere
-// geçiş ekranın altındaki bir şeride dokunarak oluyor (aşağıya bak)
+// tek bir konumun hava durumu ekranı; arama sonucu, mevcut konum, favoriler hepsi buraya gelir
 struct WeatherView: View {
     @EnvironmentObject var viewModel: WeatherViewModel
     let zoomNamespace: Namespace.ID
     let zoomSourceID: String
 
-    // favoriler listesinden açıldıysa diğer favorilere dokunarak geçebilmek
-    // için tüm liste burada tutuluyor. arama sonucu gibi tekil girişlerde bu
-    // liste boş kalıyor, alt şerit hiç görünmüyor
     private let favorites: [FavoriteCity]
 
-    // ekranda o an gösterilen konum, başta location parametresiyle kuruluyor,
-    // kullanıcı alt şeritten başka bir favoriye dokununca değişiyor
     @State private var activeLocation: WeatherLocation
     @State private var activeName: String
-
-    // paylaşım için önceden çizilmiş görsel. her hava güncellemesinde
-    // yeniden hesaplanıyor (bkz. .onChange), böylece paylaş düğmesine
-    // basıldığı an görsel zaten hazır oluyor
     @State private var shareImage: Image?
 
     init(location: WeatherLocation, zoomNamespace: Namespace.ID, zoomSourceID: String? = nil, favorites: [FavoriteCity] = []) {
@@ -44,8 +26,6 @@ struct WeatherView: View {
         return nil
     }
 
-    // favori mi diye kontrol ederken veri gelmişse api'nin kesin ismini
-    // kullanıyorum, henüz gelmediyse ekrana gelirken kullandığım ismi
     private var favoriteKey: String {
         currentWeather?.name ?? activeLocation.displayName
     }
@@ -103,8 +83,6 @@ struct WeatherView: View {
                         viewModel.toggleFavorite(name: favoriteKey, weather: currentWeather)
                     }
                 } label: {
-                    // boyutu bilerek sabit tutuyorum, eskiden favoriye eklenince
-                    // büyüyordu ve bu istenmeyen bir zıplama gibi görünüyordu
                     Image(systemName: viewModel.isFavorite(favoriteKey) ? "star.fill" : "star")
                         .foregroundColor(.yellow)
                         .font(.title2)
@@ -115,9 +93,6 @@ struct WeatherView: View {
 
             if let weather = currentWeather {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    // görsel kart henüz hazır değilse (ekrana yeni gelindiği
-                    // an gibi çok kısa bir pencerede), eski düz metni yedek
-                    // olarak kullanıyoruz — düğme hiçbir zaman boş kalmıyor
                     if let shareImage {
                         ShareLink(
                             item: shareImage,
@@ -131,7 +106,6 @@ struct WeatherView: View {
         }
     }
 
-    // MARK: - paylaşım metni (görsel kart hazır olana kadarki yedek)
     private func shareText(for weather: CityWeather) -> String {
         String(
             format: String(localized: "share.summary_format", defaultValue: "%@: %@, %@"),
@@ -141,33 +115,16 @@ struct WeatherView: View {
         )
     }
 
-    // MARK: - paylaşım kartını görsele çevirme
-    // ImageRenderer, herhangi bir SwiftUI View'ı bir bitmap'e çeviren
-    // sistem aracı — burada ShareableWeatherCard'ı, ekranda hiç
-    // görünmeden, doğrudan paylaşılabilir bir resme dönüştürüyoruz
     @MainActor
     private func renderShareImage(for weather: CityWeather) -> Image? {
         let renderer = ImageRenderer(content: ShareableWeatherCard(weather: weather, unit: viewModel.preferredUnit))
-        // sabit bir ölçek veriyorum (3x, en yüksek yaygın ekran yoğunluğu) —
-        // cihazın kendi ekranını sormanın (UIScreen.main) artık kullanımdan
-        // kaldırılmış olması yüzünden, paylaşılan görsel her cihazda hep
-        // aynı, keskin çözünürlükte çıkıyor
         renderer.scale = 3
         guard let uiImage = renderer.uiImage else { return nil }
         return Image(uiImage: uiImage)
     }
 }
 
-// MARK: - favoriler arası dokunmatik geçiş şeridi
-// eski karuselin yerine geçen basit yöntem: kaydırma jesti yok, bir favoriye
-// dokununca o şehre geçiliyor. bu ekranda tek bir kaydırılabilir katman
-// olduğu için burayı ekranın altına sabitlemek sorunsuz çalışıyor
-//
-// küçük bir görsel sorun daha vardı: malzemeyi düz şeride uygulayınca ekranın
-// tam ucundan ucuna uzanan, köşeleri hiç yuvarlak olmayan kalın bir çubuk
-// çıkıyordu. çözüm: malzemeyi yuvarlak köşeli bir şekle kırpıp, şeridi
-// kenarlardan biraz içeri çekip yüzen bir hap gibi bıraktım, biraz da
-// inceltip hafif şeffaflaştırdım
+// favoriler arası dokunmatik geçiş şeridi (eski kaydırmalı karuselin yerine)
 private struct FavoriteSwitcherStrip: View {
     let favorites: [FavoriteCity]
     @Binding var activeName: String

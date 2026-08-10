@@ -1,13 +1,11 @@
 import Foundation
 import Combine
 
-// MARK: - saatlik tahmin, grafik için sade bir veri kalıbı
 struct HourlyForecast {
     let time: Date
     let temperature: Double
 }
 
-// MARK: - ekranın durumları
 enum WeatherViewState {
     case idle
     case loading
@@ -15,9 +13,6 @@ enum WeatherViewState {
     case error(String)
 }
 
-// MARK: - sıcaklık birimi
-// api'den her zaman celsius alıyorum, fahrenayt'a sadece ekranda gösterirken
-// çeviriyorum, birim değişince yeniden ağa istek atmama gerek kalmıyor
 enum TemperatureUnit: String {
     case celsius
     case fahrenheit
@@ -33,8 +28,6 @@ enum TemperatureUnit: String {
     }
 }
 
-// MARK: - rüzgar hızı birimi
-// api'den hep km/s alıyorum, mph'e sadece ekranda çeviriyorum
 enum WindSpeedUnit: String {
     case kilometersPerHour
     case milesPerHour
@@ -50,10 +43,6 @@ enum WindSpeedUnit: String {
     }
 }
 
-// MARK: - uygulamanın beyni
-// eskiden bir delegate üzerinden haber alıyordum, servis zaten async/await
-// kullandığı için buna gerek kalmadı, artık sonucu direkt bekleyip do/catch
-// ile karşılıyorum
 @MainActor
 final class WeatherViewModel: ObservableObject {
 
@@ -63,14 +52,10 @@ final class WeatherViewModel: ObservableObject {
     @Published private(set) var airQuality: AirQuality?
     @Published private(set) var lastUpdated: Date?
 
-    // favori şehirlerin listesi, her biri isim ve koordinat taşıyor, bir daha
-    // asla sadece isimle yeniden aranmasınlar diye
     @Published var savedCities: [FavoriteCity] = [] {
         didSet { persistSavedCities() }
     }
 
-    // favori şehirlerin en son bilinen hava durumu. ana ekrandaki satırlarda
-    // her seferinde yeniden istek atmadan sıcaklık gösterebilmek için diskte tutuyorum
     @Published private(set) var favoriteSnapshots: [String: CityWeather] = [:] {
         didSet { persistFavoriteSnapshots() }
     }
@@ -99,9 +84,7 @@ final class WeatherViewModel: ObservableObject {
     }
 
     func fetchWeather(for location: WeatherLocation) {
-        // kullanıcı hızlıca başka bir şehre geçerse, eski (hâlâ devam eden)
-        // isteğin cevabı yeni ekranın üzerine yazmasın diye eskisini iptal ediyorum
-        fetchTask?.cancel()
+        fetchTask?.cancel() // eski isteğin cevabı yeni ekranın üzerine yazmasın
 
         state = .loading
         hourlyForecast = []
@@ -113,23 +96,17 @@ final class WeatherViewModel: ObservableObject {
                 let bundle = try await service.fetchWeather(at: location)
                 guard !Task.isCancelled else { return }
 
-                // koordinatla sorgulandıysa ismi kullanıcının aradığı isimle
-                // düzeltiyorum, api'nin kendi (bazen yanlış semte kayan) ismiyle değil
                 let weather = location.applying(to: bundle.current)
                 hourlyForecast = bundle.hourly
                 dailyForecast = bundle.daily
                 state = .success(weather)
                 lastUpdated = .now
 
-                // favori mi diye api'nin döndürdüğü kesin isimle kontrol ediyorum,
-                // kullanıcının yazdığı arama metniyle değil
                 recordFreshSnapshot(weather)
 
-                // hava kalitesi ikincil bir bilgi, bu istek başarısız olsa bile
-                // ekranı hataya düşürmesin diye ayrı tutuyorum
                 airQuality = try? await service.fetchAirQuality(lat: weather.lat, lon: weather.lon)
             } catch is CancellationError {
-                // iptal edilen bir isteğin hatasını kullanıcıya göstermeye gerek yok
+                // iptal edilen isteğin hatası gösterilmez
             } catch {
                 guard !Task.isCancelled else { return }
                 state = .error((error as? WeatherError)?.errorDescription ?? "Beklenmedik bir hata oluştu.")
@@ -137,10 +114,6 @@ final class WeatherViewModel: ObservableObject {
         }
     }
 
-    // ana ekran açıldığında tüm favori şehirlerin sıcaklığını sessizce tazeler,
-    // kullanıcı hiçbir yere dokunmadan güncel değerleri görür. favorinin
-    // koordinatı varsa onunla sorguluyorum, isimle yeniden aramanın
-    // getirdiği sapmalar bir daha yaşanmasın diye
     func refreshFavoriteSnapshots() {
         for favorite in savedCities {
             Task {
@@ -151,20 +124,12 @@ final class WeatherViewModel: ObservableObject {
         }
     }
 
-    // MARK: - favori ekleme/çıkarma
-    // weather parametresi sadece ekleme için zorunlu, çünkü favoriyi doğru
-    // koordinatla kaydedebilmem için elimde zaten yüklenmiş bir hava durumu
-    // olması lazım. çıkarırken buna gerek yok, nil geçilebilir
     func toggleFavorite(name: String, weather: CityWeather?) {
         if isFavorite(name) {
             savedCities.removeAll { $0.name.caseInsensitiveCompare(name) == .orderedSame }
             favoriteSnapshots.removeValue(forKey: normalized(name))
         } else if let weather, weather.name.caseInsensitiveCompare(name) == .orderedSame {
             savedCities.append(FavoriteCity(name: weather.name, lat: weather.lat, lon: weather.lon))
-
-            // şehir genelde detay ekranında yıldıza basılarak ekleniyor ve o
-            // ekranda zaten taze bir veri var. ana ekrana dönünce boşuna yeni
-            // bir istek beklemesin diye elimdeki veriyi hemen kaydediyorum
             favoriteSnapshots[normalized(weather.name)] = weather
         }
     }
@@ -173,18 +138,12 @@ final class WeatherViewModel: ObservableObject {
         savedCities.contains { $0.name.caseInsensitiveCompare(city) == .orderedSame }
     }
 
-    // EditFavoriteSheet'ten gelen takma isim/renk değişikliğini kalıcı
-    // favoriye yazıyorum. `savedCities` zaten didSet'inde diske kaydediyor,
-    // burada ekstra bir persist çağrısına gerek yok
     func updateFavorite(id: String, nickname: String?, accentColorName: String?) {
         guard let index = savedCities.firstIndex(where: { $0.id == id }) else { return }
         savedCities[index].nickname = nickname
         savedCities[index].accentColorName = accentColorName
     }
 
-    // bir şehrin taze verisi her geldiğinde (fetchWeather içinden) çağrılıyor,
-    // favoriyse anlık görüntüyü hemen güncelliyor. bu olmasa, detay ekranında
-    // doğru sıcaklığı görüp ana ekrana dönünce satır hâlâ eski değeri gösterirdi
     func recordFreshSnapshot(_ weather: CityWeather) {
         guard isFavorite(weather.name) else { return }
         favoriteSnapshots[normalized(weather.name)] = weather
@@ -194,7 +153,6 @@ final class WeatherViewModel: ObservableObject {
         city.lowercased()
     }
 
-    // MARK: - favori önbelleğini diske kaydetme
     private static func loadFavoriteSnapshots() -> [String: CityWeather] {
         guard let data = UserDefaults.standard.data(forKey: "FavoriteSnapshotsKey"),
               let decoded = try? JSONDecoder().decode([String: CityWeather].self, from: data) else {
@@ -208,11 +166,7 @@ final class WeatherViewModel: ObservableObject {
         UserDefaults.standard.set(data, forKey: "FavoriteSnapshotsKey")
     }
 
-    // MARK: - favori listesini diske kaydetme
-    // eskiden burada düz bir isim listesi saklanıyordu. yeni format artık
-    // koordinatı da tutuyor. eski formatta kayıt varsa onu okuyup koordinatsız
-    // favorilere çeviriyorum, bunlar isimle aramaya düşmeye devam ediyor,
-    // kullanıcı böyle bir favoriyi silip tekrar eklerse o da koordinatlı olur
+    // eski formatta düz isim listesi varsa koordinatsız favoriye çevirir
     private static func loadSavedCities() -> [FavoriteCity] {
         if let data = UserDefaults.standard.data(forKey: "SavedCitiesKey"),
            let decoded = try? JSONDecoder().decode([FavoriteCity].self, from: data) {
@@ -227,8 +181,6 @@ final class WeatherViewModel: ObservableObject {
         UserDefaults.standard.set(data, forKey: "SavedCitiesKey")
     }
 
-    // ana ekrandaki "mevcut konum" kartı için tek seferlik, sessiz bir hava
-    // durumu isteği. ana state'i etkilemiyor, o yüzden ayrı bir fonksiyon
     func snapshotWeather(for location: WeatherLocation) async -> CityWeather? {
         guard let bundle = try? await service.fetchWeather(at: location) else { return nil }
         return location.applying(to: bundle.current)

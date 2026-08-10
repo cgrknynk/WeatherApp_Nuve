@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-// MARK: - özgünlük turu: favoriye takma isim ve kart rengi verme
-// ana ekranda bir favoriyi SAĞA kaydırınca açılan küçük düzenleme sayfası.
-// hava durumu sorgusu her zaman şehrin GERÇEK ismi/koordinatıyla yapılmaya
-// devam ediyor — burada değiştirdiğimiz şey SADECE görünüm (bkz.
-// FavoriteCity.displayName/accentColor)
 struct EditFavoriteSheet: View {
     let favorite: FavoriteCity
     let onSave: (String?, String?) -> Void
