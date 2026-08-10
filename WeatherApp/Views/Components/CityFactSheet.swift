@@ -36,7 +36,7 @@ struct CityFactSheet: View {
 
                 content
             }
-            .navigationTitle(String(localized: "fact.title", defaultValue: "İlginç Bilgi"))
+            .navigationTitle(String(localized: "fact.title", defaultValue: "Kısa Bilgi"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
