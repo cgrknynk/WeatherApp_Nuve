@@ -257,8 +257,11 @@ struct WeatherContentView: View {
         }
     }
 
+    // sabit 2 sütun iPad'in geniş ekranında kutuları aşırı esnetip boş
+    // görünmesine yol açıyordu; .adaptive ile kutu genişliği 200pt'te
+    // sınırlanıyor, geniş ekranlarda otomatik olarak daha fazla sütun açılıyor
     private var detailsGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 160, maximum: 200), spacing: 15)], spacing: 15) {
             WeatherDetailBox(icon: "humidity", iconColor: .blue, title: "NEM", value: weather.humidity.percentFormatted, note: weather.humidityComfortLabel, trend: weather.humidityTrend)
             WindDetailBox(speedKmh: weather.windSpeed, degrees: weather.windDeg, gustKmh: weather.windGust, unit: windUnit)
 

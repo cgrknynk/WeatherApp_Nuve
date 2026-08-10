@@ -13,6 +13,13 @@ class LocationSearchService: NSObject, ObservableObject, MKLocalSearchCompleterD
 
     @Published var searchQuery = "" {
         didSet {
+            // öneriler en az 3 harf yazılınca gelsin: daha kısa sorgularda hem
+            // gereksiz istek atılmasın hem de anlamsız/aşırı geniş sonuç listesi çıkmasın
+            guard searchQuery.count >= 3 else {
+                searchCompleter.queryFragment = ""
+                searchResults = []
+                return
+            }
             searchCompleter.queryFragment = searchQuery
         }
     }

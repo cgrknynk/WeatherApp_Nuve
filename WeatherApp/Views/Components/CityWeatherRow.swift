@@ -47,9 +47,13 @@ struct CityWeatherRow: View {
 
                 if let cityTimeZone {
                     TimelineView(.everyMinute) { timeline in
-                        Text(timeline.date.formatted(Date.FormatStyle(date: .omitted, time: .shortened, timeZone: cityTimeZone)))
-                            .font(.caption2)
-                            .foregroundColor(.white.opacity(0.55))
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 9, weight: .medium))
+                            Text(timeline.date.formatted(Date.FormatStyle(date: .omitted, time: .shortened, timeZone: cityTimeZone)))
+                                .font(.caption2)
+                        }
+                        .foregroundColor(.white.opacity(0.55))
                     }
                 }
             }

@@ -689,6 +689,39 @@
         }
       }
     },
+    "fact.not_found" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Bu yer hakkında henüz bir bilgi bulamadım.\nBaşka bir şehri deneyebilirsin."
+          }
+        }
+      }
+    },
+    "fact.source" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Kaynak: Wikipedia"
+          }
+        }
+      }
+    },
+    "fact.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Kısa Bilgi"
+          }
+        }
+      }
+    },
     "Fahrenayt (°F)" : {
       "localizations" : {
         "en" : {
