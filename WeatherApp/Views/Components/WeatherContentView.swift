@@ -244,6 +244,13 @@ struct WeatherContentView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 40)
             }
+            // iPad'in geniş ekranında kartlar telefon genişliğinde tasarlanmış
+            // içerikle (sol hizalı metin, sabit yükseklikli satırlar) uçtan uca
+            // esneyince sağda kocaman boş alan bırakıyordu; okunabilir bir üst
+            // sınırla (700pt) sütunu ortalamak hem üstteki kartları hem de
+            // detay ızgarasını aynı anda düzeltiyor
+            .frame(maxWidth: 700)
+            .frame(maxWidth: .infinity)
         }
         .refreshable { onRefresh() }
         .sensoryFeedback(.success, trigger: lastUpdated)

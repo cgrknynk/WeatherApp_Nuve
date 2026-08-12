@@ -1,2159 +1,2353 @@
 {
-  "sourceLanguage" : "tr",
-  "strings" : {
-    "%lld/10 — %@" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/10 — %2$@"
+  "sourceLanguage": "tr",
+  "strings": {
+    "%lld/10 — %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/10 — %2$@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld/10 — %2$@"
+          }
         }
       }
     },
-    "1.0" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1.0"
+    "1.0": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1.0"
           }
         }
       }
     },
-    "24 SAATLİK TAHMİN" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "24-HOUR FORECAST"
+    "24 SAATLİK TAHMİN": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24-HOUR FORECAST"
           }
         }
       }
     },
-    "action.close" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Close"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kapat"
+    "AY EVRESİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MOON PHASE"
           }
         }
       }
     },
-    "action.save" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kaydet"
+    "Adres Çözümleniyor...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolving Address..."
           }
         }
       }
     },
-    "Adres Çözümleniyor..." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resolving Address..."
+    "Ayarlar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
           }
         }
       }
     },
-    "aqi.good" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good"
+    "BASINÇ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRESSURE"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İyi"
-          }
         }
       }
     },
-    "aqi.moderate" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Moderate"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Orta"
+    "BULUTLULUK": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CLOUDINESS"
           }
         }
       }
     },
-    "aqi.unhealthy" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unhealthy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sağlıksız"
+    "BİRİMLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UNITS"
           }
         }
       }
     },
-    "aqi.unhealthy_sensitive" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unhealthy for Sensitive Groups"
+    "Detay için dokun": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap for details"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Hassas Gruplar İçin Sağlıksız"
-          }
         }
       }
     },
-    "aqi.unknown" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bilinmiyor"
+    "Düzenle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
           }
         }
       }
     },
-    "aqi.very_unhealthy" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Very Unhealthy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Çok Kötü"
+    "En Az": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Min"
           }
         }
       }
     },
-    "AY EVRESİ" : {
-
-    },
-    "Ayarlar" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
+    "En Çok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max"
           }
         }
       }
     },
-    "BASINÇ" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PRESSURE"
+    "FAVORİ ŞEHİRLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FAVORITE CITIES"
           }
         }
       }
     },
-    "BİRİMLER" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "UNITS"
+    "Fahrenayt (°F)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fahrenheit (°F)"
           }
         }
       }
     },
-    "BULUTLULUK" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CLOUDINESS"
+    "Filtrele": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter"
           }
         }
       }
     },
-    "ÇİĞ NOKTASI" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DEW POINT"
+    "GÖRÜŞ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VISIBILITY"
           }
         }
       }
     },
-    "cloudiness.clear" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear sky"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Açık gökyüzü"
+    "GÜNDOĞUMU / GÜNBATIMI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUNRISE / SUNSET"
           }
         }
       }
     },
-    "cloudiness.mostly_clear" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostly clear"
+    "HAKKINDA": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ABOUT"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Az bulutlu"
-          }
         }
       }
     },
-    "cloudiness.overcast" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overcast"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kapalı"
+    "HAVA DURUMU": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONDITION"
           }
         }
       }
     },
-    "cloudiness.partly_cloudy" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partly cloudy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Parçalı bulutlu"
+    "HAVA KALİTESİ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIR QUALITY"
           }
         }
       }
     },
-    "condition.clear" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
+    "Hava Durumu": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weather"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Açık"
-          }
         }
       }
     },
-    "condition.cloudy" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cloudy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bulutlu"
+    "HİSSEDİLEN": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FEELS LIKE"
           }
         }
       }
     },
-    "condition.fog" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foggy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sisli"
+    "Kapat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
           }
         }
       }
     },
-    "condition.rain" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rainy"
+    "Konum Yükleniyor...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading Location..."
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yağmurlu"
-          }
         }
       }
     },
-    "condition.snow" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Snowy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Karlı"
+    "Konum aranıyor...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Locating..."
           }
         }
       }
     },
-    "condition.storm" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stormy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fırtınalı"
+    "Mevcut Konum": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Location"
           }
         }
       }
     },
-    "day.today" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today"
+    "NEM": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HUMIDITY"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bugün"
-          }
         }
       }
     },
-    "day.tomorrow" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tomorrow"
+    "Nuve": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuve"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yarın"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nuve"
           }
         }
       }
     },
-    "Detay için dokun" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap for details"
+    "RÜZGAR": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WIND"
           }
         }
       }
     },
-    "dew_point.comfortable" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comfortable"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Rahat"
+    "Rüzgar Birimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind Unit"
           }
         }
       }
     },
-    "dew_point.dry" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dry"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kuru"
+    "SICAKLIK ARALIĞI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TEMPERATURE RANGE"
           }
         }
       }
     },
-    "dew_point.humid" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heavy"
+    "Saat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Ağır"
-          }
         }
       }
     },
-    "dew_point.oppressive" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oppressive"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bunaltıcı"
+    "Santigrat (°C)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celsius (°C)"
           }
         }
       }
     },
-    "dew_point.slightly_humid" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Slightly heavy"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Hafif ağır"
+    "Sil": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
           }
         }
       }
     },
-    "Düzenle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit"
+    "Son güncelleme: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last updated: %@"
           }
         }
       }
     },
-    "edit_favorite.color_title" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CARD COLOR"
+    "Sonuçlar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Results"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "KART RENGİ"
-          }
         }
       }
     },
-    "edit_favorite.nickname_title" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NICKNAME"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "TAKMA İSİM"
+    "Sürüm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
           }
         }
       }
     },
-    "edit_favorite.title" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Edit Favorite"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Favoriyi Düzenle"
+    "Sıcaklık": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperature"
           }
         }
       }
     },
-    "En Az" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Min"
+    "Sıcaklık Birimi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperature Unit"
           }
         }
       }
     },
-    "En Çok" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Max"
+    "Tekrar Dene": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
           }
         }
       }
     },
-    "error.city_not_found" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "We couldn't find a city with that name. Check the spelling and try again?"
+    "Temizle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bu isimde bir şehir bulamadık. Yazımı kontrol edip tekrar dener misin?"
+        }
+      }
+    },
+    "Uygula": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply"
           }
         }
       }
     },
-    "error.decoding" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Something went wrong while reading the data. Please try again shortly."
+    "action.close": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Veri okunurken bir sorun oluştu. Birazdan tekrar dene."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kapat"
           }
         }
       }
     },
-    "error.invalid_response" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The server returned an unexpected response."
+    "action.save": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sunucudan beklenmedik bir yanıt geldi."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kaydet"
           }
         }
       }
     },
-    "error.network" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Couldn't connect. Check your internet connection and try again."
+    "aqi.good": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi"
           }
         }
       }
     },
-    "fact.button_label" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İlginç bilgi göster"
+    "aqi.moderate": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Orta"
           }
         }
       }
     },
-    "fact.not_found" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bu yer hakkında henüz bir bilgi bulamadım.\nBaşka bir şehri deneyebilirsin."
+    "aqi.unhealthy": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unhealthy"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sağlıksız"
+          }
         }
       }
     },
-    "fact.source" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kaynak: Wikipedia"
+    "aqi.unhealthy_sensitive": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unhealthy for Sensitive Groups"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hassas Gruplar İçin Sağlıksız"
           }
         }
       }
     },
-    "fact.title" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kısa Bilgi"
+    "aqi.unknown": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bilinmiyor"
           }
         }
       }
     },
-    "Fahrenayt (°F)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fahrenheit (°F)"
+    "aqi.very_unhealthy": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very Unhealthy"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Çok Kötü"
+          }
         }
       }
     },
-    "FAVORİ ŞEHİRLER" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FAVORITE CITIES"
+    "cloudiness.clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear sky"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Açık gökyüzü"
           }
         }
       }
     },
-    "feels_like.cooler_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d° cooler"
+    "cloudiness.mostly_clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostly clear"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d° daha serin"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Az bulutlu"
           }
         }
       }
     },
-    "feels_like.same" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Same as actual temperature"
+    "cloudiness.overcast": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcast"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Gerçek sıcaklıkla aynı"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kapalı"
           }
         }
       }
     },
-    "feels_like.warmer_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d° warmer"
+    "cloudiness.partly_cloudy": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partly cloudy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d° daha sıcak"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Parçalı bulutlu"
           }
         }
       }
     },
-    "Filtrele" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filter"
+    "condition.clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Açık"
           }
         }
       }
     },
-    "format.percent" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d%%"
+    "condition.cloudy": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%%%d"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bulutlu"
           }
         }
       }
     },
-    "GÖRÜŞ" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VISIBILITY"
+    "condition.fog": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foggy"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sisli"
+          }
         }
       }
     },
-    "greeting.afternoon" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good Afternoon"
+    "condition.rain": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İyi Günler"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yağmurlu"
           }
         }
       }
     },
-    "greeting.evening" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good Evening"
+    "condition.snow": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İyi Akşamlar"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Karlı"
           }
         }
       }
     },
-    "greeting.morning" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good Morning"
+    "condition.storm": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stormy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Günaydın"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fırtınalı"
           }
         }
       }
     },
-    "greeting.night" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good Night"
+    "day.today": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İyi Geceler"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bugün"
           }
         }
       }
     },
-    "GÜNDOĞUMU / GÜNBATIMI" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SUNRISE / SUNSET"
+    "day.tomorrow": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tomorrow"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yarın"
           }
         }
       }
     },
-    "HAKKINDA" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ABOUT"
+    "dew_point.comfortable": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Rahat"
           }
         }
       }
     },
-    "Hava Durumu" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weather"
+    "dew_point.dry": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dry"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kuru"
+          }
         }
       }
     },
-    "HAVA DURUMU" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CONDITION"
+    "dew_point.humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heavy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ağır"
           }
         }
       }
     },
-    "HAVA KALİTESİ" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AIR QUALITY"
+    "dew_point.oppressive": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oppressive"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bunaltıcı"
           }
         }
       }
     },
-    "HİSSEDİLEN" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "FEELS LIKE"
+    "dew_point.slightly_humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slightly heavy"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hafif ağır"
+          }
         }
       }
     },
-    "home.favorites_empty" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your favorites list is empty.\nSearch above to add new cities."
+    "edit_favorite.color_title": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CARD COLOR"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Favori listeniz boş.\nYukarıdan arayarak yeni şehirler ekleyin."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "KART RENGİ"
           }
         }
       }
     },
-    "home.filter_no_matches" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No cities match your filter.\nTry adjusting it."
+    "edit_favorite.nickname_title": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NICKNAME"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Filtreye uyan şehir yok.\nFiltreyi değiştirmeyi dene."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "TAKMA İSİM"
           }
         }
       }
     },
-    "home.location_denied" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Location access is off.\nEnable it in Settings to see the weather right where you are."
+    "edit_favorite.title": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Favorite"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Konum izni kapalı.\nAyarlar'dan izin verirsen bulunduğun yerin hava durumunu buradan görebilirsin."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Favoriyi Düzenle"
           }
         }
       }
     },
-    "humidity.comfortable" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comfortable"
+    "error.city_not_found": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't find a city with that name. Check the spelling and try again?"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Rahat"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bu isimde bir şehir bulamadık. Yazımı kontrol edip tekrar dener misin?"
           }
         }
       }
     },
-    "humidity.dry" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dry"
+    "error.decoding": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong while reading the data. Please try again shortly."
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kuru"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veri okunurken bir sorun oluştu. Birazdan tekrar dene."
           }
         }
       }
     },
-    "humidity.humid" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Humid"
+    "error.invalid_response": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server returned an unexpected response."
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Nemli"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sunucudan beklenmedik bir yanıt geldi."
           }
         }
       }
     },
-    "humidity.very_humid" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Very humid"
+    "error.network": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't connect. Check your internet connection and try again."
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Çok nemli"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bağlantı kurulamadı. İnternetini kontrol edip tekrar dene."
           }
         }
       }
     },
-    "Kapat" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Close"
+    "fact.button_label": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show interesting fact"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İlginç bilgi göster"
           }
         }
       }
     },
-    "km/s" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "km/h"
+    "fact.not_found": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I couldn't find any information about this place yet.\nTry another city."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bu yer hakkında henüz bir bilgi bulamadım.\nBaşka bir şehri deneyebilirsin."
           }
         }
       }
     },
-    "Konum aranıyor..." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Locating..."
+    "fact.source": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: Wikipedia"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kaynak: Wikipedia"
+          }
         }
       }
     },
-    "Konum Yükleniyor..." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading Location..."
+    "fact.title": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quick Fact"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kısa Bilgi"
           }
         }
       }
     },
-    "Mevcut Konum" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Current Location"
+    "feels_like.cooler_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° cooler"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° daha serin"
+          }
         }
       }
     },
-    "moon.first_quarter" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İlk Dördün"
+    "feels_like.same": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as actual temperature"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gerçek sıcaklıkla aynı"
           }
         }
       }
     },
-    "moon.full" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Dolunay"
+    "feels_like.warmer_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° warmer"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d° daha sıcak"
           }
         }
       }
     },
-    "moon.illumination_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Illumination: %@"
+    "format.percent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d%%"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Aydınlanma: %@"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%%%d"
           }
         }
       }
     },
-    "moon.last_quarter" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Son Dördün"
+    "greeting.afternoon": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good Afternoon"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi Günler"
+          }
         }
       }
     },
-    "moon.new" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yeni Ay"
+    "greeting.evening": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good Evening"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi Akşamlar"
           }
         }
       }
     },
-    "moon.waning_crescent" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Küçülen Hilal"
+    "greeting.morning": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good Morning"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Günaydın"
           }
         }
       }
     },
-    "moon.waning_gibbous" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Küçülen Ay"
+    "greeting.night": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good Night"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi Geceler"
+          }
         }
       }
     },
-    "moon.waxing_crescent" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Büyüyen Hilal"
+    "home.favorites_empty": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your favorites list is empty.\nSearch above to add new cities."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Favori listeniz boş.\nYukarıdan arayarak yeni şehirler ekleyin."
           }
         }
       }
     },
-    "moon.waxing_gibbous" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Büyüyen Ay"
+    "home.filter_no_matches": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No cities match your filter.\nTry adjusting it."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Filtreye uyan şehir yok.\nFiltreyi değiştirmeyi dene."
           }
         }
       }
     },
-    "mph" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "mph"
+    "home.location_denied": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location access is off.\nEnable it in Settings to see the weather right where you are."
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Konum izni kapalı.\nAyarlar'dan izin verirsen bulunduğun yerin hava durumunu buradan görebilirsin."
+          }
         }
       }
     },
-    "NEM" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "HUMIDITY"
+    "humidity.comfortable": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Rahat"
           }
         }
       }
     },
-    "nowcast.clear" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Önümüzdeki 2 saat içinde yağış beklenmiyor"
+    "humidity.dry": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dry"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kuru"
           }
         }
       }
     },
-    "nowcast.ongoing" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Şu anda yağış var"
+    "humidity.humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humid"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nemli"
+          }
         }
       }
     },
-    "nowcast.starting_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yağış yaklaşık %d dakika içinde başlayabilir"
+    "humidity.very_humid": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Very humid"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Çok nemli"
           }
         }
       }
     },
-    "nowcast.stopping_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yağış yaklaşık %d dakika içinde dinebilir"
+    "km/s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "km/h"
           }
         }
       }
     },
-    "Nuve" : {
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Nuve"
+    "moon.first_quarter": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First Quarter"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İlk Dördün"
           }
         }
       }
     },
-    "ÖNERİLEN ŞEHİRLER" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "SUGGESTED CITIES"
+    "moon.full": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Moon"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Dolunay"
+          }
         }
       }
     },
-    "ÖNÜMÜZDEKİ GÜNLER" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "UPCOMING DAYS"
+    "moon.illumination_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Illumination: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aydınlanma: %@"
           }
         }
       }
     },
-    "outfit.cold" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "kalın bir mont iyi olur"
+    "moon.last_quarter": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Quarter"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Son Dördün"
           }
         }
       }
     },
-    "outfit.freezing" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "kalın mont, bere ve eldiven şart"
+    "moon.new": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Moon"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yeni Ay"
+          }
         }
       }
     },
-    "outfit.hot" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "hafif ve ferah giyin"
+    "moon.waning_crescent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning Crescent"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Küçülen Hilal"
           }
         }
       }
     },
-    "outfit.mild" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "ince bir ceket yeterli"
+    "moon.waning_gibbous": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waning Gibbous"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Küçülen Ay"
           }
         }
       }
     },
-    "outfit.pleasant" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bugün özel bir hazırlığa gerek yok"
+    "moon.waxing_crescent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing Crescent"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Büyüyen Hilal"
+          }
         }
       }
     },
-    "outfit.umbrella" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "şemsiyeni yanına al"
+    "moon.waxing_gibbous": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waxing Gibbous"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Büyüyen Ay"
           }
         }
       }
     },
-    "outfit.wind" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "rüzgar kırıcı bir şey giy"
+    "mph": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mph"
           }
         }
       }
     },
-    "pressure.high" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "High pressure"
+    "nowcast.clear": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No precipitation expected in the next 2 hours"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yüksek basınç"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Önümüzdeki 2 saat içinde yağış beklenmiyor"
           }
         }
       }
     },
-    "pressure.low" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Low pressure"
+    "nowcast.ongoing": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It's raining right now"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Alçak basınç"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Şu anda yağış var"
           }
         }
       }
     },
-    "pressure.normal" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Normal"
+    "nowcast.starting_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Precipitation may start in about %d minutes"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Normal"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yağış yaklaşık %d dakika içinde başlayabilir"
           }
         }
       }
     },
-    "RÜZGAR" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WIND"
+    "nowcast.stopping_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Precipitation may stop in about %d minutes"
           }
-        }
-      }
-    },
-    "Rüzgar Birimi" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wind Unit"
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yağış yaklaşık %d dakika içinde dinebilir"
           }
         }
       }
     },
-    "Saat" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time"
+    "outfit.cold": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a warm coat would be good"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "kalın bir mont iyi olur"
           }
         }
       }
     },
-    "Santigrat (°C)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Celsius (°C)"
+    "outfit.freezing": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a heavy coat, hat, and gloves are a must"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "kalın mont, bere ve eldiven şart"
           }
         }
       }
     },
-    "search.no_results_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No results found for \"%@\"."
+    "outfit.hot": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dress light and airy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "\"%@\" için sonuç bulunamadı."
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "hafif ve ferah giyin"
           }
         }
       }
     },
-    "Şehir ara (Örn: İstanbul)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search city (e.g. Istanbul)"
+    "outfit.mild": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a light jacket is enough"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "ince bir ceket yeterli"
+          }
         }
       }
     },
-    "share.summary_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@: %2$@, %3$@"
+    "outfit.pleasant": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No special preparation needed today"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$@, %3$@"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bugün özel bir hazırlığa gerek yok"
           }
         }
       }
     },
-    "SICAKLIK ARALIĞI" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TEMPERATURE RANGE"
+    "outfit.umbrella": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bring your umbrella"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "şemsiyeni yanına al"
           }
         }
       }
     },
-    "Sil" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
+    "outfit.wind": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wear something windproof"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "rüzgar kırıcı bir şey giy"
           }
         }
       }
     },
-    "Sıcaklık" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Temperature"
+    "pressure.high": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High pressure"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yüksek basınç"
+          }
         }
       }
     },
-    "Sıcaklık Birimi" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Temperature Unit"
+    "pressure.low": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low pressure"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alçak basınç"
           }
         }
       }
     },
-    "Son güncelleme: %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last updated: %@"
+    "pressure.normal": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Normal"
           }
         }
       }
     },
-    "Sonuçlar" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Results"
+    "search.no_results_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No results found for \"%@\"."
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "\"%@\" için sonuç bulunamadı."
+          }
         }
       }
-    },
-    "Şu An" : {
-
     },
-    "sunset.decent" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Fena olmayabilir"
+    "share.summary_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: %2$@, %3$@"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$@, %3$@"
+          }
         }
       }
     },
-    "sunset.great" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Çok güzel olabilir"
+    "sunset.decent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could be decent"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fena olmayabilir"
           }
         }
       }
     },
-    "sunset.plain" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sıradan olabilir"
+    "sunset.great": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could be great"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Çok güzel olabilir"
           }
         }
       }
     },
-    "sunset.spectacular" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Muhteşem olabilir"
+    "sunset.plain": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could be ordinary"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sıradan olabilir"
+          }
         }
       }
     },
-    "Sürüm" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version"
+    "sunset.spectacular": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could be spectacular"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Muhteşem olabilir"
           }
         }
       }
     },
-    "Tekrar Dene" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try Again"
+    "visibility.excellent": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excellent visibility"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Mükemmel görüş"
           }
         }
       }
     },
-    "Temizle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
+    "visibility.fog": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foggy"
           }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sisli"
+          }
         }
       }
     },
-    "Uygula" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apply"
+    "visibility.good": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good visibility"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "İyi görüş"
           }
         }
       }
     },
-    "visibility.excellent" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Excellent visibility"
+    "visibility.limited": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limited visibility"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Mükemmel görüş"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sınırlı görüş"
           }
         }
       }
     },
-    "visibility.fog" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foggy"
+    "weather.best_day_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best day to be outside: %@"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sisli"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Dışarı çıkmak için en iyi gün: %@"
           }
         }
       }
     },
-    "visibility.good" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Good visibility"
+    "weather.feels_cooler": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels cooler than the actual temperature"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "İyi görüş"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gerçek sıcaklıktan daha serin hissettiriyor"
           }
         }
       }
     },
-    "visibility.limited" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Limited visibility"
+    "weather.feels_warmer": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feels warmer than the actual temperature"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sınırlı görüş"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gerçek sıcaklıktan daha sıcak hissettiriyor"
           }
         }
       }
     },
-    "weather.best_day_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Dışarı çıkmak için en iyi gün: %@"
+    "weather.high_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H:%@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Y:%@"
           }
         }
       }
     },
-    "weather.feels_cooler" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feels cooler than the actual temperature"
+    "weather.low_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L:%@"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Gerçek sıcaklıktan daha serin hissettiriyor"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "D:%@"
           }
         }
       }
     },
-    "weather.feels_warmer" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Feels warmer than the actual temperature"
+    "wind.gust_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudden gust: %@"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Gerçek sıcaklıktan daha sıcak hissettiriyor"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ani hamle: %@"
           }
         }
       }
     },
-    "weather.high_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "H:%@"
+    "wind.speed_kmh_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.0f km/h"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Y:%@"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%.0f km/s"
           }
         }
       }
     },
-    "weather.low_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L:%@"
+    "wind.speed_mph_format": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.0f mph"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "D:%@"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%.0f mph"
           }
         }
       }
     },
-    "wind.gust_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sudden gust: %@"
+    "wmo.clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Ani hamle: %@"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Açık"
           }
         }
       }
     },
-    "wind.speed_kmh_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%.0f km/h"
+    "wmo.drizzle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drizzle"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%.0f km/s"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Çiseleyen Yağmur"
           }
         }
       }
     },
-    "wind.speed_mph_format" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%.0f mph"
+    "wmo.fog": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foggy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%.0f mph"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sisli"
           }
         }
       }
     },
-    "wmo.clear" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
+    "wmo.freezing_drizzle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freezing Drizzle"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Açık"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Dondurucu Çise"
           }
         }
       }
     },
-    "wmo.drizzle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drizzle"
+    "wmo.freezing_rain": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freezing Rain"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Çiseleyen Yağmur"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Dondurucu Yağmur"
           }
         }
       }
     },
-    "wmo.fog" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Foggy"
+    "wmo.mostly_clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostly Clear"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sisli"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Az Bulutlu"
           }
         }
       }
     },
-    "wmo.freezing_drizzle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Freezing Drizzle"
+    "wmo.overcast": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcast"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Dondurucu Çise"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kapalı"
           }
         }
       }
     },
-    "wmo.freezing_rain" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Freezing Rain"
+    "wmo.partly_cloudy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partly Cloudy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Dondurucu Yağmur"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Parçalı Bulutlu"
           }
         }
       }
     },
-    "wmo.mostly_clear" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostly Clear"
+    "wmo.rain": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Az Bulutlu"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Yağmurlu"
           }
         }
       }
     },
-    "wmo.overcast" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overcast"
+    "wmo.rain_showers": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rain Showers"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kapalı"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sağanak Yağmur"
           }
         }
       }
     },
-    "wmo.partly_cloudy" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partly Cloudy"
+    "wmo.snow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snowy"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Parçalı Bulutlu"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kar Yağışlı"
           }
         }
       }
     },
-    "wmo.rain" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rainy"
+    "wmo.snow_grains": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow Grains"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Yağmurlu"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kar Taneleri"
           }
         }
       }
     },
-    "wmo.rain_showers" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rain Showers"
+    "wmo.snow_showers": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Snow Showers"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Sağanak Yağmur"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Kar Sağanağı"
           }
         }
       }
     },
-    "wmo.snow" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Snowy"
+    "wmo.thunderstorm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thunderstorm"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kar Yağışlı"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gök Gürültülü Fırtına"
           }
         }
       }
     },
-    "wmo.snow_grains" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Snow Grains"
+    "wmo.thunderstorm_hail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thunderstorm with Hail"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kar Taneleri"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Dolu ile Fırtına"
           }
         }
       }
     },
-    "wmo.snow_showers" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Snow Showers"
+    "wmo.unknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
           }
         },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Kar Sağanağı"
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bilinmiyor"
           }
         }
       }
     },
-    "wmo.thunderstorm" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thunderstorm"
+    "ÇİĞ NOKTASI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DEW POINT"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Gök Gürültülü Fırtına"
-          }
         }
       }
     },
-    "wmo.thunderstorm_hail" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thunderstorm with Hail"
+    "ÖNERİLEN ŞEHİRLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUGGESTED CITIES"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Dolu ile Fırtına"
+        }
+      }
+    },
+    "ÖNÜMÜZDEKİ GÜNLER": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UPCOMING DAYS"
           }
         }
       }
     },
-    "wmo.unknown" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
+    "Şehir ara (Örn: İstanbul)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search city (e.g. Istanbul)"
           }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Bilinmiyor"
+        }
+      }
+    },
+    "Şu An": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now"
           }
         }
       }
     }
   },
-  "version" : "1.1"
+  "version": "1.1"
 }
