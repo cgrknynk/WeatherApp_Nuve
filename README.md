@@ -1,6 +1,6 @@
 # WeatherApp
 
-SwiftUI ile yazılmış, iOS 26 hedefleyen bir hava durumu uygulaması. Liquid Glass tasarım dili, canlı gündüz/gece arka planları, favori şehirler, hava kalitesi ve 24 saatlik/günlük tahmin içeriyor.
+SwiftUI ile yazılmış, iOS 26 ve iOS 18 hedefleyen bir hava durumu uygulaması. Liquid Glass tasarım dili, canlı gündüz/gece arka planları, favori şehirler, hava kalitesi ve 24 saatlik/günlük tahmin içeriyor.
 
 ## Kurulum
 
